@@ -1,0 +1,51 @@
+[cloud/catalyst]
+provider=openstack
+auth_url=https://iam.cn-north-1.myhwclouds.com/v3
+username=mschyj
+password=1980813c
+project_name=cn-north-1
+region_name=cn-north-1
+request_floating_ip=False
+identity_api_version=3
+project_domain_name=mschyj
+user_domain_name=mschyj
+
+[login/centos]
+image_user=root
+image_user_sudo=root
+image_sudo=True
+user_key_name=hwc-key
+user_key_private=/root/hwc/auth/id_rsa
+user_key_public=/root/hwc/auth/id_rsa.pub
+
+[setup/ansible-slurm]
+provider=ansible
+frontend_groups=slurm_master
+compute_groups=slurm_worker
+global_var_upgrade_packages=no
+global_var_user_sfs_url=sfs-nas1.cn-north-1.myhuaweicloud.com:/share-480fca1b
+global_var_user_obs_name=hwc-obs
+global_var_user_obs_url=http://obs.cn-north-1.myhwclouds.com
+global_var_user_obs_endpoint=cn-north-1
+global_var_user_ak=CNYVGDKK2PPBQEEMUYQG
+global_var_user_sk=6imAmmCVVzMqR1dm5x0AKJcL1BILA7TlOsSMhu4G
+global_var_user_client_ip=192.168.0.188
+
+[cluster/slurm]
+cloud=catalyst
+login=centos
+setup=ansible-slurm
+security_group=security-mschyj
+network_ids=6c7d662f-eb15-4a44-b2ef-2e71ff7fce15
+
+#CentOS image
+#s3fs: befbd7ca-dd7a-4737-bc60-33a1cdf6ea8b
+#no host: ad0b6a08-5bee-4f88-9f90-4ac43257ee17  
+#no slurm: 0dcfbd93-b2e3-47d0-b831-258d4b5143ad
+#orig centos69: dec6b36c-b122-4a20-b4eb-e9c32344b13e
+#ubuntu: f1dd2272-7041-479e-9663-646632b6ac00
+image_id=befbd7ca-dd7a-4737-bc60-33a1cdf6ea8b
+flavor=c1.medium
+frontend_nodes=1
+compute_nodes=2
+ssh_to=frontend

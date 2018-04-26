@@ -1,0 +1,11 @@
+- hosts: 127.0.0.1
+  tasks:
+  - name: ansible create directory example
+    file:
+      path: /tmp/obs
+      state: directory
+  - name: create a file
+    file:
+      path: /tmp/file
+      state: touch
+      mode: 0600

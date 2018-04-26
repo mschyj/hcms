@@ -1,0 +1,84 @@
+#!/usr/bin/env python
+
+import getpass
+import sys
+import os
+import ConfigParser
+
+from keystoneauth1.identity import v3
+from keystoneauth1 import session
+from novaclient import client
+
+home=os.environ['HOME']
+config=ConfigParser.ConfigParser()
+config.read(home + "/hwc/cfg/config")
+username=config.get("cloud/catalyst","username")
+password=config.get("cloud/catalyst","password")
+auth_url=config.get("cloud/catalyst","auth_url")
+user_domain_name=config.get("cloud/catalyst","user_domain_name")
+project_domain_name=config.get("cloud/catalyst","project_domain_name")
+project_name=config.get("cloud/catalyst","project_name")
+
+cluster_home="/root/hwc"
+local_user=getpass.getuser()
+remote_user=config.get("login/centos","image_user")
+ssh_files=[cluster_home+"/auth/id_rsa",cluster_home+"/auth/id_rsa.pub",cluster_home + "/auth/authorized_keys"]
+
+auth = v3.Password(
+       username=username,
+       password=password,
+       auth_url=auth_url,
+       user_domain_name=user_domain_name,
+       project_domain_name=project_domain_name,
+       project_name=project_name
+    )
+		
+def start_vm(vmname):
+  found=False
+  sess = session.Session(auth=auth, verify=True)
+  #print sess.get_endpoint(service_type='compute',interface='public')
+  novacli = client.Client("2.1", session=sess)
+  instances=novacli.servers.list()
+  #print instances
+  for vm in instances:
+    if vm.name == vmname:
+      print vm.name + " is starting"
+      novacli.servers.start(vm)
+      found = True
+  if(not found):
+    print vmname + " is not found"
+def stop_vm(vmname):
+  found=False
+  sess = session.Session(auth=auth, verify=True)
+  #print sess.get_endpoint(service_type='compute',interface='public')
+  novacli = client.Client("2.1", session=sess)
+  instances=novacli.servers.list()
+  #print instances
+  for vm in instances:
+    if vm.name == vmname:
+      print vm.name + " is stopping"
+      novacli.servers.stop(vm)
+      found = True
+  if(not found):
+    print vmname + " is not found"
+	
+def get_vm_ip(vmname):
+  found=False
+  frontip=0
+  sess = session.Session(auth=auth, verify=True)
+  novacli = client.Client("2.1", session=sess)
+  instances=novacli.servers.list()
+  for vm in instances:
+    if vm.name == vmname:
+      IPs = sum(vm.networks.values(),[])
+      frontip=IPs[0]
+      found = True
+  if(not found):
+    print vmname + " is not found"
+  return frontip
+
+def init_ssh():
+  print "init ssh"
+if __name__ == "__main__":
+  print ('This is main of module "vm.py"')
+  get_vm_ip("slurm-frontend001")

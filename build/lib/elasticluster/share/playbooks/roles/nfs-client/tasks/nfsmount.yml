@@ -1,0 +1,16 @@
+---
+
+- name: ensure {{fs.mountpoint}} directory exists
+  file:
+    path={{fs.mountpoint}}
+    state=directory
+
+- name: add to /etc/fstab
+  mount:
+    name='{{fs.mountpoint}}'
+    src='{{fs.fs}}'
+    fstype=nfs
+    opts='{{fs.options|default("rw,async")}}'
+    state='{{fs.state|default("mounted")}}'
+
+

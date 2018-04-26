@@ -1,0 +1,15 @@
+- hosts: 192.168.0.188
+  tasks:
+  - name: get ip address
+    set_fact:
+      local_ip: "ansible_all_ipv4_addresses" 
+      debug: var=local_ip
+  - name: ansible create directory example
+    file:
+      path: /tmp/obs
+      state: directory
+  - name: create a file
+    file:
+      path: /tmp/file
+      state: touch
+      mode: 0600
