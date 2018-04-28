@@ -29,7 +29,8 @@ global_var_user_obs_url=http://obs.cn-north-1.myhwclouds.com
 global_var_user_obs_endpoint=cn-north-1
 global_var_user_ak=CNYVGDKK2PPBQEEMUYQG
 global_var_user_sk=6imAmmCVVzMqR1dm5x0AKJcL1BILA7TlOsSMhu4G
-global_var_user_client_ip=192.168.0.188
+global_var_user_client_ip=192.168.0.230
+global_var_user_client_home=/root/hwc
 
 [cluster/slurm]
 cloud=catalyst

@@ -28,12 +28,12 @@ nodes:
         image_id: befbd7ca-dd7a-4737-bc60-33a1cdf6ea8b
         image_user: root
         image_userdata: ''
-        instance_id: af500973-2935-48a8-b5b9-76fca460134c
+        instance_id: 65dacfda-cbb8-44c0-a0b0-154b2c0bd7b9
         ips:
-        - 192.168.0.251
+        - 192.168.0.100
         kind: compute
         name: compute001
-        preferred_ip: 192.168.0.251
+        preferred_ip: 192.168.0.100
         security_group: security-mschyj
         ssh_proxy_command: ''
         user_key_name: hwc-key
@@ -49,12 +49,33 @@ nodes:
         image_id: befbd7ca-dd7a-4737-bc60-33a1cdf6ea8b
         image_user: root
         image_userdata: ''
-        instance_id: d9aa5ef4-b4cc-45d2-8dfd-845ef432dc78
+        instance_id: 5293a27c-3a9a-4d00-b170-e43c14fad521
         ips:
-        - 192.168.0.20
+        - 192.168.0.171
         kind: compute
         name: compute002
-        preferred_ip: 192.168.0.20
+        preferred_ip: 192.168.0.171
+        security_group: security-mschyj
+        ssh_proxy_command: ''
+        user_key_name: hwc-key
+        user_key_private: /root/hwc/auth/id_rsa
+        user_key_public: /root/hwc/auth/id_rsa.pub
+    -   cluster_name: slurm
+        extra:
+            accelerator_count: 0
+            login: centos
+            min_num: 2
+            network_ids: 6c7d662f-eb15-4a44-b2ef-2e71ff7fce15
+        flavor: c1.medium
+        image_id: befbd7ca-dd7a-4737-bc60-33a1cdf6ea8b
+        image_user: root
+        image_userdata: ''
+        instance_id: e6b23251-0806-46e1-91f7-94c84c6f2a12
+        ips:
+        - 192.168.0.158
+        kind: compute
+        name: compute003
+        preferred_ip: 192.168.0.158
         security_group: security-mschyj
         ssh_proxy_command: ''
         user_key_name: hwc-key
@@ -71,12 +92,12 @@ nodes:
         image_id: befbd7ca-dd7a-4737-bc60-33a1cdf6ea8b
         image_user: root
         image_userdata: ''
-        instance_id: b34c6343-8d7b-4f99-a869-8aa4dd4df58e
+        instance_id: 3a55ed3c-0fdf-40d7-8fae-19036a789c72
         ips:
-        - 192.168.0.46
+        - 192.168.0.52
         kind: frontend
         name: frontend001
-        preferred_ip: 192.168.0.46
+        preferred_ip: 192.168.0.52
         security_group: security-mschyj
         ssh_proxy_command: ''
         user_key_name: hwc-key

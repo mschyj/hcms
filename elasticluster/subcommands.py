@@ -338,7 +338,11 @@ class ResizeCluster(AbstractCommand):
         for grp in self.params.nodes_to_add:
             print("Adding %d %s node(s) to the cluster"
                   "" % (self.params.nodes_to_add[grp], grp))
-
+            #begin:chenyjie:add confirm for adding nodes
+            if not self.params.yes:
+               confirm_or_abort("Do you really want to remove them?",
+                                 msg="Aborting upon user request.")
+            #end:chenyjie:add confirm for adding nodes
             # Currently we can't save which template was used to setup a
             # cluster, therefore we imply the configuration of the new nodes
             # to match already existent nodes in this group. If no node was
