@@ -40,13 +40,22 @@ def start_vm(vmname):
   novacli = client.Client("2.1", session=sess)
   instances=novacli.servers.list()
   #print instances
-  for vm in instances:
-    if vm.name == vmname:
-      print vm.name + " is starting"
-      novacli.servers.start(vm)
-      found = True
+  if vmname == 'all':
+    for vm in instances:
+      if vm.status == 'SHUTOFF':
+        print vm.name + " is starting"
+        print vm.status
+        novacli.servers.start(vm)
+        found = True
+  else:
+    for vm in instances:
+      if vm.name == vmname:
+        print vm.name + " is starting"
+        novacli.servers.start(vm)
+        found = True
   if(not found):
     print vmname + " is not found"
+
 def stop_vm(vmname):
   found=False
   sess = session.Session(auth=auth, verify=True)
@@ -77,8 +86,22 @@ def get_vm_ip(vmname):
     print vmname + " is not found"
   return frontip
 
+def find_vm(vmname):
+  sess = session.Session(auth=auth, verify=True)
+  novacli = client.Client("2.1", session=sess)
+  try:
+    vm = novacli.servers.find(name=vmname)
+    print vm
+  except AttributeError:
+    print "Attribute Error"
+  except client.exceptions.NotFound:
+    print "Not Found"
+
 def init_ssh():
   print "init ssh"
+
 if __name__ == "__main__":
   print ('This is main of module "vm.py"')
-  get_vm_ip("slurm-frontend001")
+  #get_vm_ip("slurm-frontend001")
+  #start_vm('all')
+  #find_vm("slurm-frontend004")
