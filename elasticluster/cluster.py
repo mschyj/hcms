@@ -1330,9 +1330,6 @@ class Node(Struct):
             host_ip = config.get("squid","host_ip")
             squid_port = config.get("squid","squid_port")
             stdin,stdout,stderr = ssh.exec_command("/usr/bin/echo $http_proxy")
-            print"================ out:%s ===========" %stdout.read()
-            print"================ err:%s ===========" %stderr.read()
-            print"================ in:%s ===========" %stdin.read()
             if stdout.read() != "http://%s:%s"%(host_ip,squid_port):
                 command_proxy1 = "echo http_proxy=http://%s:%s >> /etc/wgetrc"%(host_ip,squid_port)
                 command_proxy2 = "echo https_proxy=http://%s:%s >> /etc/wgetrc"%(host_ip,squid_port)
