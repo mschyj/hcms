@@ -1,6 +1,6 @@
 pip>=9.0.0
 PyCLI
-ansible!=2.3.0,<2.4,>=2.2.3
+ansible>=2.2.3,!=2.3.0,<2.4
 click>=4.0
 coloredlogs
 netaddr
@@ -22,8 +22,8 @@ python-glanceclient
 python-neutronclient
 python-cinderclient
 python-novaclient
-Babel!=2.4.0,>=2.3.4
-pbr!=2.1.0,>=2.0.0
+Babel>=2.3.4,!=2.4.0
+pbr>=2.0.0,!=2.1.0
 azure
 enum34
 functools32

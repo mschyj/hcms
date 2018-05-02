@@ -59,6 +59,7 @@ elasticluster/exceptions.py
 elasticluster/gc3pie_config.py
 elasticluster/migration_tools.py
 elasticluster/repository.py
+elasticluster/sfscreate.py
 elasticluster/subcommands.py
 elasticluster/utils.py
 elasticluster/validate.py

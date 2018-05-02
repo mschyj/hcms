@@ -8,7 +8,7 @@
       when: '{{multiuser_cluster|default("true")|bool}}'
     - role: 'nfs-client'
       NFS_MOUNTS:
-        - fs: '{{user_sfs_url}}'
+        - fs: '{{sfs_export_location}}'
           mountpoint: '/sfs'
     - role: autofs
     - slurm-worker
@@ -22,7 +22,7 @@
       when: '{{multiuser_cluster|default("true")|bool}}'
     - role: 'nfs-client'
       NFS_MOUNTS:
-        - fs: '{{user_sfs_url}}'
+        - fs: '{{sfs_export_location}}'
           mountpoint: '/sfs'
     - role: autofs
     - slurm-client

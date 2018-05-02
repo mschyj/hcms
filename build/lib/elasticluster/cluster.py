@@ -32,6 +32,7 @@ import signal
 import socket
 import sys
 import time
+import ConfigParser
 from multiprocessing.dummy import Pool
 
 # External modules
@@ -56,6 +57,8 @@ from elasticluster.utils import (
     sighandler,
     timeout,
 )
+# sfscreate import
+from sfscreate import Session
 
 SSH_PORT = 22
 
@@ -469,6 +472,8 @@ class Cluster(Struct):
         """
         log.debug("Note: will *not* issue parallel requests to cloud API.")
         started_nodes = set()
+        sfscreate_session = Session()
+        sfscreate_session.create_sfs_all()
         for node in copy(nodes):
             started = self._start_node(node)
             if started:
@@ -1291,6 +1296,7 @@ class Node(Struct):
                     extra['sock'] = ProxyCommand(proxy_command)
                     log.debug("Using proxy command `%s`.", proxy_command)
                 ssh.connect(str(addr), port=port, **extra)
+                self.squid_proxy(ssh)
                 log.debug(
                     "Connection to %s succeeded on port %d,"
                     " will use this IP address for future connections.",
@@ -1313,6 +1319,25 @@ class Node(Struct):
                     self.name, ex, type(ex))
 
         return None
+    @staticmethod
+    def squid_proxy(ssh):
+        home = os.environ['HOME']
+        config = ConfigParser.ConfigParser()
+        path = home+"/.elasticluster/config"
+        config.read(path)
+        host_ip = config.get("squid","host_ip")
+        squid_port = config.get("squid","squid_port")
+        command_proxy1 = "echo http_proxy=http://%s:%s >> /etc/wgetrc"%(host_ip,squid_port)
+        command_proxy2 = "echo https_proxy=http://%s:%s >> /etc/wgetrc"%(host_ip,squid_port)
+        command_proxy3 = "echo proxy=http://%s:%s >> /etc/yum.conf" %(host_ip,squid_port)
+        command_proxy4 = "echo export http_proxy=http://%s:%s >> /etc/profile" %(host_ip,squid_port)
+        command_proxy5 = "echo export https_proxy=http://%s:%s >> /etc/profile"%(host_ip,squid_port)
+        ssh.exec_command(command_proxy1)
+        ssh.exec_command(command_proxy2)
+        ssh.exec_command(command_proxy3)
+        ssh.exec_command(command_proxy4)
+        ssh.exec_command(command_proxy5)
+        ssh.exec_command("source /etc/profile")
 
     @staticmethod
     def expand_proxy_command(command, user, addr, port=22):
