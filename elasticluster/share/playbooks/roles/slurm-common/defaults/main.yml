@@ -26,3 +26,10 @@ slurm_returntoservice: 2
 slurm_selecttype: 'select/cons_res'
 slurm_selecttypeparameters: 'CR_Core_Memory'
 slurm_taskplugin: 'task/none'
+
+# defaults vaues for power saving 
+slurm_suspendtime: -1
+slurm_suspendrate: 60
+slurm_suspendtimeout: 300
+slurm_resumerate: 300
+slurm_resumetimeout: 600

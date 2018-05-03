@@ -9,26 +9,33 @@
     file:
       path: '{{obs_mountpoint}}'
       state: directory
+    when: '{{obs_enabled|default("false")|bool}}'
   - name: Create the obs password file
     file:
       path: '{{obs_passwd}}'
       state: touch
       mode: 0600
+    when: '{{obs_enabled|default("false")|bool}}'
   - name: Setup OBS-insert into password file
     action: shell echo {{user_ak}}:{{user_sk}} > {{obs_passwd}}
+    when: '{{obs_enabled|default("false")|bool}}'
   - name: Setup OBS-umount obs
     mount:
       name: '{{obs_mountpoint}}'
       src: none
       fstype: none
       state: unmounted
+    when: '{{obs_enabled|default("false")|bool}}'
   - name: Setup OBS-mount obs
     action: shell s3fs {{user_obs_name}} {{obs_mountpoint}} -o url={{user_obs_url}} -o endpoint={{user_obs_endpoint}} -o passwd_file={{obs_passwd}}
+    when: '{{obs_enabled|default("false")|bool}}'
   - name: Remove item from /etc/fstaba
     lineinfile: 
       dest: /etc/fstab
       state: absent
       regexp: '^s3fs#'
     #action: shell sed -i '\/s3fs\/d' /etc/fstab 
+    when: '{{obs_enabled|default("false")|bool}}'
   - name: Add to /etc/fstab
     action: shell echo s3fs#{{user_obs_name}} {{obs_mountpoint}} fuse _netdev,allow_other,use_path_request_style,url={{user_obs_url}},passwd_file={{obs_passwd}} 0 0 >> /etc/fstab
+    when: '{{obs_enabled|default("false")|bool}}'
