@@ -20,7 +20,7 @@ __author__ = 'Nicolas Baer <nicolas.baer@uzh.ch>'
 
 import logging
 
-log = logging.getLogger("hwc")
+log = logging.getLogger("hwcc")
 
 
 # API

@@ -122,7 +122,7 @@ class ElastiCluster(cli.app.CommandLineApp):
         # Hack around http://bugs.python.org/issue9253 ?
         if "--version" in sys.argv:
             import pkg_resources
-            version = pkg_resources.get_distribution("hwcc").version
+            version = pkg_resources.get_distribution("elasticluster").version
             print("hwcc version %s" % version)
             sys.exit(0)
 
@@ -170,7 +170,7 @@ class ElastiCluster(cli.app.CommandLineApp):
                 if not os.path.exists(os.path.dirname(self.params.config)):
                     os.mkdir(os.path.dirname(self.params.config))
                 template = resource_filename(
-                    'hwcc', 'share/etc/config.template')
+                    'elasticluster', 'share/etc/config.template')
                 log.warning("Deploying default configuration file to %s.",
                             self.params.config)
                 shutil.copyfile(template, self.params.config)
