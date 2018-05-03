@@ -62,11 +62,11 @@ __author__ = ', '.join([
 
 
 class ElastiCluster(cli.app.CommandLineApp):
-    name = "elasticluster"
-    description = "Elasticluster starts, stops, grows, and shrinks clusters on a cloud."
+    name = "hwcc"
+    description = "hwcc starts, stops, grows, and shrinks clusters on a cloud."
 
     default_configuration_file = os.path.expanduser(
-        "~/.elasticluster/config")
+        "~/.hwcc/config")
 
     def setup(self):
         cli.app.CommandLineApp.setup(self)
@@ -74,7 +74,7 @@ class ElastiCluster(cli.app.CommandLineApp):
         # Global parameters
         self.add_param('-v', '--verbose', action='count', default=0,
                        help="Increase verbosity. If at least four `-v` option "
-                       "are given, elasticluster will create new VMs "
+                       "are given, hwcc will create new VMs "
                        "sequentially instead of doing it in parallel.")
         self.add_param('-s', '--storage', metavar="PATH",
                        help="Path to the storage folder. (Default: `%(default)s`",
@@ -111,7 +111,7 @@ class ElastiCluster(cli.app.CommandLineApp):
         # to parse subcommands
         self.subparsers = self.argparser.add_subparsers(
             title="COMMANDS",
-            help=("Available commands. Run `elasticluster cmd --help`"
+            help=("Available commands. Run `hwcc cmd --help`"
                   " to have information on command `cmd`."))
 
         for command in commands:
@@ -122,8 +122,8 @@ class ElastiCluster(cli.app.CommandLineApp):
         # Hack around http://bugs.python.org/issue9253 ?
         if "--version" in sys.argv:
             import pkg_resources
-            version = pkg_resources.get_distribution("elasticluster").version
-            print("elasticluster version %s" % version)
+            version = pkg_resources.get_distribution("hwcc").version
+            print("hwcc version %s" % version)
             sys.exit(0)
 
         cli.app.CommandLineApp.pre_run(self)
@@ -170,7 +170,7 @@ class ElastiCluster(cli.app.CommandLineApp):
                 if not os.path.exists(os.path.dirname(self.params.config)):
                     os.mkdir(os.path.dirname(self.params.config))
                 template = resource_filename(
-                    'elasticluster', 'share/etc/config.template')
+                    'hwcc', 'share/etc/config.template')
                 log.warning("Deploying default configuration file to %s.",
                             self.params.config)
                 shutil.copyfile(template, self.params.config)

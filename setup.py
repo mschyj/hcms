@@ -145,7 +145,7 @@ else:
 from setuptools import setup, find_packages
 
 setup(
-    name="elasticluster",
+    name="hwcc",
     version=read_whole_file("version.txt").strip(),
     description="A command line tool to create, manage and setup computing clusters hosted on a public or private cloud infrastructure.",
     long_description=read_whole_file('README.rst'),
@@ -182,7 +182,7 @@ setup(
     include_package_data=True,  # include files mentioned by MANIFEST.in
     entry_points={
         'console_scripts': [
-            'elasticluster = elasticluster.__main__:main',
+            'hwcc = elasticluster.__main__:main',
         ]
     },
     setup_requires=['Babel>=2.3.4'],  # see Issue #268

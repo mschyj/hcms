@@ -155,7 +155,7 @@ SCHEMA = {
         str: str,
     },
     'storage': {
-        Optional('storage_path', default=os.path.expanduser("~/.elasticluster/storage")): str,
+        Optional('storage_path', default=os.path.expanduser("~/.hwcc/storage")): str,
         Optional('storage_type'): ['yaml', 'json', 'pickle'],
     },
 }
@@ -868,7 +868,7 @@ class Creator(object):
     :raises MultipleInvalid: configuration validation
     """
 
-    DEFAULT_STORAGE_PATH = os.path.expanduser("~/.elasticluster/storage")
+    DEFAULT_STORAGE_PATH = os.path.expanduser("~/.hwcc/storage")
     DEFAULT_STORAGE_TYPE = 'yaml'
 
     def __init__(self, conf, storage_path=None, storage_type=None):
