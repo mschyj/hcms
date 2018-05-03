@@ -118,7 +118,7 @@ elif python_version == (2, 7):
         'python-glanceclient',
         'python-neutronclient',
         'python-cinderclient',
-        'python-novaclient',
+        'python-novaclient==7.0.0',
         # fix dependency conflict among OpenStack libraries:
         # `osc-lib` has a more strict dependency specifier
         # which is not picked up by `pip` because it's not
@@ -126,7 +126,7 @@ elif python_version == (2, 7):
         'Babel>=2.3.4,!=2.4.0',
         'pbr>=2.0.0,!=2.1.0',
         # MS-Azure
-        'azure',
+        #'azure',
         ## the following 6 are all required dependencies
         ## which are not picked up, see issue #500
         'enum34',
@@ -137,7 +137,7 @@ elif python_version == (2, 7):
         'secretstorage',
     ]
 else:
-    raise RuntimeError("ElastiCluster requires Python 2.6 or 2.7")
+    raise RuntimeError("hwcc requires Python 2.6 or 2.7")
 
 
 ## real setup description begins here
@@ -190,17 +190,17 @@ setup(
         # ElastiCluster core requirements
         'pip>=9.0.0',  ## see issue #433
         'PyCLI',
-        'ansible>=2.2.3,!=2.3.0,<2.4',  ## whitelist only "known good" versions of Ansible
+        'ansible>=2.2.3.0',#!=2.3.0,<2.4',  ## whitelist only "known good" versions of Ansible
         'click>=4.0',  ## click.prompt() added in 4.0
         'coloredlogs',
         'netaddr',
         'schema',
         'subprocess32',  ## stdlib subprocess but correct under multithreading
         # EC2 clouds
-        'boto>=2.48',
+        #'boto>=2.48',
         # GCE cloud
-        'google-api-python-client',
-        'google-compute-engine',
+        #'google-api-python-client',
+        #'google-compute-engine',
         'python-gflags',
         'simplejson>=2.5.0', # needed by `uritemplate` but somehow not picked up
         'pytz',   ## required by `positional` but somehow not picked up
