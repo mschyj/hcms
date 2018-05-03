@@ -23,7 +23,7 @@ for file in ssh_files:
     scp_cmd="scp " + file + blank + remote_user + "@" + vm_ip + ":" + remote_ssh_dir 
     #status,output=commands.getstatusoutput(cp_cmd)
     #status,output=commands.getstatusoutput(scp_cmd)
-    output=subprocess.call(cp_cmd,shell=True)
+    #output=subprocess.call(cp_cmd,shell=True)
     output=subprocess.call(scp_cmd,shell=True)
   else:
     print file + " is not found"

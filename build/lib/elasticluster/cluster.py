@@ -1325,12 +1325,23 @@ class Node(Struct):
         config = ConfigParser.ConfigParser()
         path = home+"/.elasticluster/config"
         config.read(path)
+        if "squid" not in config.sections():
+            log.info("Cannot use squid,because squid section is not in config file")
+            return
         is_use_squid = config.get("squid","is_use_squid")
         if is_use_squid:
             host_ip = config.get("squid","host_ip")
             squid_port = config.get("squid","squid_port")
-            stdin,stdout,stderr = ssh.exec_command("/usr/bin/echo $http_proxy")
-            if stdout.read() != "http://%s:%s"%(host_ip,squid_port):
+            stdin,stdout,stderr = ssh.exec_command("/usr/bin/grep http_proxy /etc/profile")
+            proxy_out = stdout.readlines()
+            is_proxy_exsit = False
+  
+            if len(proxy_out) != 0 :
+               for proxy_info in proxy_out:
+                   proxy_info_str = proxy_info.encode("utf-8").split("\n")[0]
+                   if proxy_info_str == "export http_proxy=http://%s:%s"%(host_ip,squid_port):
+                       is_proxy_exsit = True
+            if not is_proxy_exsit:
                 command_proxy1 = "echo http_proxy=http://%s:%s >> /etc/wgetrc"%(host_ip,squid_port)
                 command_proxy2 = "echo https_proxy=http://%s:%s >> /etc/wgetrc"%(host_ip,squid_port)
                 command_proxy3 = "echo proxy=http://%s:%s >> /etc/yum.conf" %(host_ip,squid_port)
