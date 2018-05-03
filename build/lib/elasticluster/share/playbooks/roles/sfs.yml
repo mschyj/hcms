@@ -1,0 +1,31 @@
+---
+
+- name: Slurm worker nodes Playbook
+  hosts: all
+  roles:
+    - role: 'nis'
+      NIS_MASTER: "{{groups.slurm_master[0]}}"
+      when: '{{multiuser_cluster|default("true")|bool}}'
+    - role: 'nfs-client'
+      NFS_MOUNTS:
+        - fs: '{{user_sfs_url}}'
+          mountpoint: '/sfs'
+      when: '{{sfs_enabled|default("false")|bool}}'
+    - role: autofs
+    - slurm-worker
+
+
+- name: Slurm submit nodes Playbook
+  hosts: slurm_submit:slurm_client
+  roles:
+    - role: 'nis'
+      NIS_MASTER: "{{groups.slurm_master[0]}}"
+      when: '{{multiuser_cluster|default("true")|bool}}'
+    - role: 'nfs-client'
+      NFS_MOUNTS:
+        - fs: '{{user_sfs_url}}'
+          mountpoint: '/sfs'
+      when: '{{sfs_enabled|default("false")|bool}}'
+    - role: autofs
+    - slurm-client
+
