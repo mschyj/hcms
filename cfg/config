@@ -62,3 +62,8 @@ flavor=s2.small.1
 
 [cluster/slurm/worker]
 flavor=c1.medium
+
+[squid]
+is_use_squid=false
+host_ip=192.168.0.230
+squid_port=3128
