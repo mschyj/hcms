@@ -3,12 +3,12 @@ import json
 
 home=os.environ['HOME']
 config=ConfigParser.ConfigParser()
-config.read(home+"/.elasticluster/config")
-username=config.get("cloud/catalyst","username")
-password=config.get("cloud/catalyst","password")
-domain_name=config.get("cloud/catalyst","user_domain_name")
-project_name=config.get("cloud/catalyst","project_name")
-auth_url=config.get("cloud/catalyst","auth_url")
+config.read(home+"/.hwcc/config")
+username=config.get("cloud/hwc","username")
+password=config.get("cloud/hwc","password")
+domain_name=config.get("cloud/hwc","user_domain_name")
+project_name=config.get("cloud/hwc","project_name")
+auth_url=config.get("cloud/hwc","auth_url")
 
 headers = {
     'Content-Type': 'application/json;charset=utf8',
