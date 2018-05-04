@@ -1323,7 +1323,7 @@ class Node(Struct):
     def squid_proxy(ssh):
         home = os.environ['HOME']
         config = ConfigParser.ConfigParser()
-        path = home+"/.elasticluster/config"
+        path = home+"/.hwcc/config"
         config.read(path)
         if "squid" not in config.sections():
             log.info("Cannot use squid,because squid section is not in config file")

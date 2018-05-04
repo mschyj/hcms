@@ -105,11 +105,16 @@ Default ssh to node: %s
     msg += """
 To login on the frontend node, run the command:
 
-    elasticluster ssh %s
+    hwcc ssh %s
 
 To upload or download files to the cluster, use the command:
 
-    elasticluster sftp %s
+    hwcc sftp %s
+
+To enable slurm power saving options, use the steps:
+    
+    1:check the config file, make sure the value of global_var_slurm_suspendtime is not -1
+    2:run the script: sh Initslurm.sh
 """ % (cluster.name, cluster.name)
     return msg
 
@@ -565,7 +570,7 @@ class ListNodes(AbstractCommand):
                             "(more human readable than --json)")
         parser.add_argument(
             '-u', '--update', action='store_true', default=False,
-            help="By default `elasticluster list-nodes` will not contact the "
+            help="By default `hwcc list-nodes` will not contact the "
                  "EC2 provider to get up-to-date information, unless `-u` "
                  "option is given.")
 
