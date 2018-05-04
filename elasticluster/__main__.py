@@ -36,7 +36,6 @@ from elasticluster import log
 from elasticluster.subcommands import (
     AbstractCommand,
     ExportCluster,
-    GC3PieConfig,
     ImportCluster,
     ListClusters,
     ListNodes,
@@ -101,7 +100,6 @@ class ElastiCluster(cli.app.CommandLineApp):
                     ResizeCluster(self.params),
                     SshFrontend(self.params),
                     SftpFrontend(self.params),
-                    GC3PieConfig(self.params),
                     MigrationCommand(self.params),
                     RemoveNode(self.params),
                     ExportCluster(self.params),
