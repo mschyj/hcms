@@ -119,6 +119,7 @@ elif python_version == (2, 7):
         'python-neutronclient',
         'python-cinderclient',
         'python-novaclient==7.0.0',
+        #'python-novaclient',
         # fix dependency conflict among OpenStack libraries:
         # `osc-lib` has a more strict dependency specifier
         # which is not picked up by `pip` because it's not
@@ -190,7 +191,8 @@ setup(
         # ElastiCluster core requirements
         'pip>=9.0.0',  ## see issue #433
         'PyCLI',
-        'ansible==2.2.3.0',#!=2.3.0,<2.4',  ## whitelist only "known good" versions of Ansible
+        'ansible==2.2.3',
+        #'ansible!=2.3.0,<2.4',  ## whitelist only "known good" versions of Ansible
         'click>=4.0',  ## click.prompt() added in 4.0
         'coloredlogs',
         'netaddr',
@@ -215,4 +217,5 @@ setup(
     ] + version_dependent_requires),
     tests_require=['tox', 'mock', 'pytest>=2.10'],  # read right-to-left
     cmdclass={'test': Tox},
+    zip_safe=False,
 )
