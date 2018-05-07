@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/usr/bin/hwcc", line 5, in <module>
+    from pkg_resources import load_entry_point
+  File "build/bdist.linux-x86_64/egg/pkg_resources/__init__.py", line 2927, in <module>
+  File "build/bdist.linux-x86_64/egg/pkg_resources/__init__.py", line 2913, in _call_aside
+  File "build/bdist.linux-x86_64/egg/pkg_resources/__init__.py", line 2940, in _initialize_master_working_set
+  File "build/bdist.linux-x86_64/egg/pkg_resources/__init__.py", line 637, in _build_master
+  File "build/bdist.linux-x86_64/egg/pkg_resources/__init__.py", line 650, in _build_from_requirements
+  File "build/bdist.linux-x86_64/egg/pkg_resources/__init__.py", line 829, in resolve
+pkg_resources.DistributionNotFound: The 'Babel!=2.4.0,>=2.3.4' distribution was not found and is required by hwcc
