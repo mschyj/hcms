@@ -217,5 +217,4 @@ setup(
     ] + version_dependent_requires),
     tests_require=['tox', 'mock', 'pytest>=2.10'],  # read right-to-left
     cmdclass={'test': Tox},
-    zip_safe=False,
 )
