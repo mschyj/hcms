@@ -759,7 +759,8 @@ class SftpFrontend(AbstractCommand):
                           else '/dev/null')
         sftp_cmdline = [
             "sftp",
-            "-P", "{0:d}".format(port),
+            #"-P", "{0:d}".format(port),
+            "-o", "Port={0}".format(port),
             "-o", "UserKnownHostsFile={0}".format(knownhostsfile),
             "-o", "StrictHostKeyChecking=no",
             "-o", "IdentityFile={0}".format(frontend.user_key_private),
