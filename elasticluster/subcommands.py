@@ -222,11 +222,12 @@ class Start(AbstractCommand):
                     print(
                         "\nYour cluster `{0}` is ready!"
                         .format(cluster.name))
+                print(cluster_summary(cluster))
                 else:
                     print(
                         "\nWARNING: YOUR CLUSTER `{0}` IS NOT READY YET!"
                         .format(cluster.name))
-            print(cluster_summary(cluster))
+            #print(cluster_summary(cluster))
         except (KeyError, ImageError, SecurityGroupError, ClusterError) as err:
             log.error("Could not start cluster `%s`: %s", cluster.name, err)
             raise
