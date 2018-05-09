@@ -222,7 +222,7 @@ class Start(AbstractCommand):
                     print(
                         "\nYour cluster `{0}` is ready!"
                         .format(cluster.name))
-                print(cluster_summary(cluster))
+                    print(cluster_summary(cluster))
                 else:
                     print(
                         "\nWARNING: YOUR CLUSTER `{0}` IS NOT READY YET!"
