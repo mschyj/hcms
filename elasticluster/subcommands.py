@@ -222,11 +222,12 @@ class Start(AbstractCommand):
                     print(
                         "\nYour cluster `{0}` is ready!"
                         .format(cluster.name))
+                    print(cluster_summary(cluster))
                 else:
                     print(
                         "\nWARNING: YOUR CLUSTER `{0}` IS NOT READY YET!"
                         .format(cluster.name))
-            print(cluster_summary(cluster))
+            #print(cluster_summary(cluster))
         except (KeyError, ImageError, SecurityGroupError, ClusterError) as err:
             log.error("Could not start cluster `%s`: %s", cluster.name, err)
             raise
@@ -759,7 +760,8 @@ class SftpFrontend(AbstractCommand):
                           else '/dev/null')
         sftp_cmdline = [
             "sftp",
-            "-P", "{0:d}".format(port),
+            #"-P", "{0:d}".format(port),
+            "-o", "Port={0}".format(port),
             "-o", "UserKnownHostsFile={0}".format(knownhostsfile),
             "-o", "StrictHostKeyChecking=no",
             "-o", "IdentityFile={0}".format(frontend.user_key_private),

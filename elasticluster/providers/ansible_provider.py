@@ -168,8 +168,9 @@ class AnsibleSetupProvider(AbstractSetupProvider):
             # No inventory file has been created, maybe an
             # invalid class has been specified in config file? Or none?
             # assume it is fine.
+            # chenyjie-change the default return value from True to False
             elasticluster.log.info("No setup required for this cluster.")
-            return True
+            return False
         assert os.path.exists(inventory_path), (
                 "inventory file `{inventory_path}` does not exist"
                 .format(inventory_path=inventory_path))
