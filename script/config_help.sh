@@ -289,7 +289,7 @@ read -p "Do you want to intall slurm:[y/n default y] " install_slurm
 
 if [ -z $install_slurm ] || [ "$install_slurm" == "y" ]
     then
-        echo -e "\n[setup/ansible_slurm]" >> ~/.hwcc/config
+        echo -e "\n[setup/ansible-slurm]" >> ~/.hwcc/config
         echo "provider = ansible" >> ~/.hwcc/config
         read -p "Enter your slurm master name[default master]: " slurm_master
         if [ ! -z $slurm_master ]
@@ -320,12 +320,12 @@ if [ -z $install_slurm ] || [ "$install_slurm" == "y" ]
                 echo "login = root" >>~/.hwcc/config
         fi
         echo "setup = ansible-slurm" >> ~/.hwcc/config        
-        read -p "Enter your security group name of slurm[default sg-cluster]: " security_group
+        read -p "Enter your security group name of slurm[default Sys-default]: " security_group
         if [ ! -z $security_group ]
             then
                 echo "security_group = $security_group" >> ~/.hwcc/config
             else
-                echo "security_group = sg-cluster" >>~/.hwcc/config
+                echo "security_group = Sys-default" >>~/.hwcc/config
         fi
 
         read -p "Enter your network id of slurm[subnet id]: " network_ids
