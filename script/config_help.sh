@@ -160,16 +160,16 @@ if [ "$is_create_sfs" != p ]
                                         fi
                                 fi
 
-                                read -p "Enter your sfs endpoint[default sfs.cn-north-1.myhuaweicloud.com ,pass p]: " sfs_endpoint       
-                                if [ "$sfs_endpoint" != p ]
-                                    then
-                                        if [ ! -z $sfs_endpoint ]
-                                            then
-                                                sed -i "/^sfs_endpoint/c sfs_endpoint = $sfs_endpoint" ~/.hwcc/config          
-                                            else
-                                                sed -i "/^sfs_endpoint/c sfs_endpoint = sfs.cn-north-1.myhuaweicloud.com" ~/.hwcc/config               
-                                        fi
-                                fi
+                               # read -p "Enter your sfs endpoint[default sfs.cn-north-1.myhuaweicloud.com ,pass p]: " sfs_endpoint       
+                               # if [ "$sfs_endpoint" != p ]
+                               #     then
+                               #         if [ ! -z $sfs_endpoint ]
+                               #             then
+                               #                 sed -i "/^sfs_endpoint/c sfs_endpoint = $sfs_endpoint" ~/.hwcc/config          
+                               #             else
+                               #                 sed -i "/^sfs_endpoint/c sfs_endpoint = sfs.cn-north-1.myhuaweicloud.com" ~/.hwcc/config               
+                               #         fi
+                               # fi
                         fi
                 fi
         else
