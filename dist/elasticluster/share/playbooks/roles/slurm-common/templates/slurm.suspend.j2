@@ -1,0 +1,14 @@
+#!/bin/bash
+# Example SuspendProgram
+sudo sh -c 'echo "`date` Susped invoked $0 $*" >>/var/log/power_save.log'
+hosts=`scontrol show hostnames $1`
+scontrol reconfig
+echo "$hosts will be suspended"  >>/var/log/power_save.log
+for host in $hosts
+do
+   echo "$host is suspending"  >>/var/log/power_save.log
+   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{user_client_ip}} python ~/.hwcc/script/stop_vm.py slurm-$host >> /var/log/power_save.log
+   echo "$host is suspended"  >>/var/log/power_save.log
+done
+#scontrol reconfig
+#scontrol update NodeName=compute001 state=down reason='suspended'

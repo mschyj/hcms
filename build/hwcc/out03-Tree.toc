@@ -1,0 +1,5 @@
+('/usr/local/lib/python2.7/site-packages/configparser-3.5.0-py2.7.egg',
+ None,
+ set(['*.py', '*.pyc', '*.pyd', '*.pyo', '*.so', 'EGG-INFO']),
+ 'DATA',
+ [])

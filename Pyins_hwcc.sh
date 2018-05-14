@@ -1,6 +1,6 @@
 rm -fr dist
 rm -fr build
-pyinstaller -d \
+pyinstaller \
             --paths=.:/root/hwcc-chenyjie:/root/hwcc-chenyjie/elasticluster \
             --paths=/root/hwcc-chenyjie/elasticluster/providers \
             --paths=/usr/local/lib/python2.7:/usr/local/lib/python2.7/site-packages \
