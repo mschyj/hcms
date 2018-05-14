@@ -384,6 +384,12 @@ if [ -z $install_slurm ] || [ "$install_slurm" == "y" ]
             else
                 echo "master_nodes = $master_nodes" >> ~/.hwcc/config            
         fi
+        read -p "Enter your availability zone of slurm nodes:" availability_zone
+        if [ ! -z $availability_zone ]
+            then
+                echo "availability_zone = $availability_zone" >> ~/.hwcc/config
+        fi
+
         read -p "Enter your number of slurm worker: " worker_nodes
         
         if [ $worker_nodes -lt 1 ] || [ -z $worker_nodes ]
