@@ -46,10 +46,10 @@ read -p "Enter your region name[pass p]: " region_name
 if [ "$region_name" != p ]
     then
         sed -i "/^region_name/c region_name = $region_name" ~/.hwcc/config
-        sed -i "/^sfs_endpoint/c sfs_endpoint = sfs.$region_name.myhuawei.com" ~/.hwcc/config
+        sed -i "/^sfs_endpoint/c sfs_endpoint = sfs.$region_name.myhuaweicloud.com" ~/.hwcc/config
     else
         region_name=`grep region_name ~/.hwcc/config | awk '{print $3}'`
-        sed -i "/^sfs_endpoint/c sfs_endpoint = sfs.$region_name.myhuawei.com" ~/.hwcc/config
+        sed -i "/^sfs_endpoint/c sfs_endpoint = sfs.$region_name.myhuaweicloud.com" ~/.hwcc/config
 fi
 
 sed -i "/^auth_url/c auth_url = https://iam.$region_name.myhwclouds.com/v$identify_api_version" ~/.hwcc/config
@@ -308,6 +308,42 @@ if [ -z $install_slurm ] || [ "$install_slurm" == "y" ]
             slurm_worker=worker
             echo "worker_groups = slurm_worker" >>~/.hwcc/config
         fi  
+        
+        if [ ! $is_use_squid ] 
+            then
+                read -p "Enter your user_client_ip: " user_client_ip
+                echo "global_var_user_client_ip = $user_client_ip" >> ~/.hwcc/config
+            else 
+                echo "global_var_user_client_ip = $host_ip" >> ~/.hwcc/config
+        fi
+  
+        read -p "Enter your slurm suspend time(/s) " slurm_suspend_time
+        if [ ! -z $slurm_suspend_time ]
+            then
+                echo "global_var_slurm_suspendtime = $slurm_suspend_time" >> ~/.hwcc/config
+        fi
+        
+        is_create_sfs=`grep "is_create_sfs" ~/.hwcc/config | awk '{print $3}'`
+        if [ "$is_create_sfs" == "True" ] 
+            then        
+                read -p "if you want to use sfs on slurm[default y]: " sfs_enabled 
+                if [ -z $sfs_enabled ] || [ "$sfs_enabled" == "y" ]
+                    then
+                        echo "global_var_sfs_enabled = True" >> ~/.hwcc/config
+                    else
+                        echo "global_var_sfs_enabled = False" >> ~/.hwcc/config
+                fi
+        fi      
+                
+        read -p "if you want to use nfs on slurm[default n]: " nfs_enabled
+        if [ -z $sfs_enabled ] || [ "$sfs_enabled" == "n" ]
+            then
+               echo "global_var_nfs_enabled = False" >> ~/.hwcc/config
+            else
+               echo "global_var_nfs_enabled = True" >> ~/.hwcc/config
+        fi
+
+
 
         ######################### setup slurm config ##################################
         echo -e "\n[cluster/slurm]" >> ~/.hwcc/config
