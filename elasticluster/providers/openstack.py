@@ -27,7 +27,7 @@ __author__ = ', '.join([
 
 # System imports
 import os
-import threading
+import threading,ConfigParser
 from warnings import warn
 from time import sleep
 
@@ -159,7 +159,9 @@ class OpenStackCloudProvider(AbstractCloudProvider):
         self._os_tenant_name = self._get_os_config_value('project name', project_name, ['OS_PROJECT_NAME', 'OS_TENANT_NAME'])
         self._os_project_domain_name = self._get_os_config_value('project domain name', project_domain_name, ['OS_PROJECT_DOMAIN_NAME'], 'default')
         self._os_region_name = self._get_os_config_value('region_name', region_name, ['OS_REGION_NAME'], '')
-
+        self.config = ConfigParser.ConfigParser()
+        self.config.read(os.environ['HOME']+"/.hwcc/config")
+        self.availability_zone = self.config.get("cluster/slurm","availability_zone")  
         # the OpenStack versioning mess
         if nova_api_version is not None:
             warn('Deprecated parameter `nova_api_version` given to OpenStackProvider;'
@@ -499,8 +501,8 @@ class OpenStackCloudProvider(AbstractCloudProvider):
         # due to some `nova_client.servers.create()` implementation weirdness,
         # the first three args need to be spelt out explicitly and cannot be
         # conflated into `**vm_start_args`
-        vm = self.nova_client.servers.create(node_name, image_id, flavor, **vm_start_args)
-
+        vm = self.nova_client.servers.create(node_name,image_id,flavor,availability_zone=self.availability_zone,**vm_start_args)
+      #  vm = self.nova_client.servers.create(node_name,image_id, flavor, **vm_start_args)
         # allocate and attach a floating IP, if requested
         if self.request_floating_ip:
             # We need to list the floating IPs for this instance
