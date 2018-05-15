@@ -169,11 +169,11 @@ class Start(AbstractCommand):
         Starts a new cluster.
         """
 
-        cluster_template = self.params.cluster
+        cluster_template = self.params.template
         if self.params.cluster_name:
             cluster_name = self.params.cluster_name
         else:
-            cluster_name = self.params.cluster
+            cluster_name = self.params.clustername
 
         creator = make_creator(self.params.config,
                                storage_path=self.params.storage)
@@ -260,7 +260,7 @@ class Stop(AbstractCommand):
         """
         Stops the cluster if it's running.
         """
-        cluster_name = self.params.cluster
+        cluster_name = self.params.clustername
         creator = make_creator(self.params.config,
                                storage_path=self.params.storage)
         try:
@@ -332,7 +332,7 @@ class ResizeCluster(AbstractCommand):
                                storage_path=self.params.storage)
 
         # Get current cluster configuration
-        cluster_name = self.params.cluster
+        cluster_name = self.params.clustername
         template = self.params.template
 
         try:
@@ -582,7 +582,7 @@ class ListNodes(AbstractCommand):
         """
         creator = make_creator(self.params.config,
                                storage_path=self.params.storage)
-        cluster_name = self.params.cluster
+        cluster_name = self.params.clustername
         try:
             cluster = creator.load_cluster(cluster_name)
             if self.params.update:
@@ -625,7 +625,7 @@ class SetupCluster(AbstractCommand):
     def execute(self):
         creator = make_creator(self.params.config,
                                storage_path=self.params.storage)
-        cluster_name = self.params.cluster
+        cluster_name = self.params.clustername
 
         print("Updating cluster `%s`..." % cluster_name)
         try:
@@ -670,7 +670,7 @@ class SshFrontend(AbstractCommand):
     def execute(self):
         creator = make_creator(self.params.config,
                                storage_path=self.params.storage)
-        cluster_name = self.params.cluster
+        cluster_name = self.params.clustername
         try:
             cluster = creator.load_cluster(cluster_name)
             cluster.update()
@@ -737,7 +737,7 @@ class SftpFrontend(AbstractCommand):
     def execute(self):
         creator = make_creator(self.params.config,
                                storage_path=self.params.storage)
-        cluster_name = self.params.cluster
+        cluster_name = self.params.clustername
         try:
             cluster = creator.load_cluster(cluster_name)
             cluster.update()
@@ -794,7 +794,7 @@ class GC3PieConfig(AbstractCommand):
             " and will be removed in release 1.4 of ElastiCluster")
         creator = make_creator(self.params.config,
                                storage_path=self.params.storage)
-        cluster_name = self.params.cluster
+        cluster_name = self.params.clustername
         try:
             cluster = creator.load_cluster(cluster_name)
         except (ClusterNotFound, ConfigurationError) as ex:
