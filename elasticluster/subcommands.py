@@ -129,7 +129,7 @@ class Start(AbstractCommand):
             "start", help="Create a cluster using the supplied configuration.",
             description=self.__doc__)
         parser.set_defaults(func=self)
-        parser.add_argument('cluster',
+        parser.add_argument('template',
                             help="Type of cluster. It refers to a "
                                  "configuration stanza [cluster/<name>]")
         parser.add_argument('-n', '--name', dest='cluster_name',
@@ -246,7 +246,7 @@ class Stop(AbstractCommand):
             "stop", help="Stop a cluster and all associated VM instances.",
             description=self.__doc__)
         parser.set_defaults(func=self)
-        parser.add_argument('cluster', help='name of the cluster')
+        parser.add_argument('clustername', help='name of the cluster')
         parser.add_argument('--force', action="store_true", default=False,
                             help="Remove the cluster even if not all the nodes"
                                  " have been terminated properly.")
@@ -288,7 +288,7 @@ class ResizeCluster(AbstractCommand):
             "resize", help="Resize a cluster by adding or removing "
                            "compute nodes.", description=self.__doc__)
         parser.set_defaults(func=self)
-        parser.add_argument('cluster', help='name of the cluster')
+        parser.add_argument('clustername', help='name of the cluster')
         parser.add_argument('-a', '--add', metavar='N1:GROUP1[,N2:GROUP2]',
                             help="Add N1 nodes of group GROUP1, "
                                  "N2 of group GROUP2 etc...")
@@ -358,7 +358,7 @@ class ResizeCluster(AbstractCommand):
             #       complicated for the user
             if (not grp in cluster.nodes or not cluster.nodes[grp]) \
                     and not template:
-                print "Elasticluster can not infer which template to use for "\
+                print "Hwccluster can not infer which template to use for "\
                       "the new node(s). Please provide the template with " \
                       "the `-t` or `--template` option"
                 return
@@ -563,7 +563,7 @@ class ListNodes(AbstractCommand):
             "list-nodes", help="Show information about the nodes in the "
                                "cluster", description=self.__doc__)
         parser.set_defaults(func=self)
-        parser.add_argument('cluster', help='name of the cluster')
+        parser.add_argument('clustername', help='name of the cluster')
         parser.add_argument('--json', action='store_true',
                             help="Produce JSON output")
         parser.add_argument('--pretty-json', action='store_true',
@@ -616,7 +616,7 @@ class SetupCluster(AbstractCommand):
         parser = subparsers.add_parser(
             "setup", help="Configure the cluster.", description=self.__doc__)
         parser.set_defaults(func=self)
-        parser.add_argument('cluster', help='name of the cluster')
+        parser.add_argument('clustername', help='name of the cluster')
         parser.add_argument(
             'extra', nargs='*', default=[],
             help=("Extra arguments will be appended (unchanged)"
@@ -658,7 +658,7 @@ class SshFrontend(AbstractCommand):
             "ssh", help="Connect to the frontend of the cluster using the "
                         "`ssh` command", description=self.__doc__)
         parser.set_defaults(func=self)
-        parser.add_argument('cluster', help='name of the cluster')
+        parser.add_argument('clustername', help='name of the cluster')
         parser.add_argument('-n', '--node', metavar='HOSTNAME', dest='ssh_to',
                             help="Name of node you want to ssh to. By "
                             "default, the first node of the `ssh_to` option "
@@ -725,7 +725,7 @@ class SftpFrontend(AbstractCommand):
             help="Open an SFTP session to the cluster frontend host.",
             description=self.__doc__)
         parser.set_defaults(func=self)
-        parser.add_argument('cluster', help='name of the cluster')
+        parser.add_argument('clustername', help='name of the cluster')
         parser.add_argument('-n', '--node', metavar='HOSTNAME', dest='ssh_to',
                             help="Name of node you want to ssh to. By "
                             "default, the first node of the `ssh_to` option "
@@ -781,7 +781,7 @@ class GC3PieConfig(AbstractCommand):
             "gc3pie-config", help="Print a GC3Pie configuration snippet.",
             description=self.__doc__)
         parser.set_defaults(func=self)
-        parser.add_argument('cluster', help='name of the cluster')
+        parser.add_argument('clustername', help='name of the cluster')
         parser.add_argument('-a', '--append', metavar='FILE',
                             help='append configuration to file FILE')
 
@@ -836,7 +836,7 @@ class ExportCluster(AbstractCommand):
             '-o', '--output-file', metavar='FILE', dest='zipfile',
             help="Output file to be used. By default the cluster is exported "
             "into a <cluster>.zip file where <cluster> is the cluster name.")
-        parser.add_argument('cluster', help='Name of the cluster to export.')
+        parser.add_argument('clustername', help='Name of the cluster to export.')
 
     def pre_run(self):
         # find proper path to zip file
@@ -954,7 +954,7 @@ class ImportCluster(AbstractCommand):
         parser.add_argument('--rename', metavar='NAME',
                             help="Rename the cluster during import.")
         parser.add_argument("file", help="Path to ZIP file produced by "
-                            "`elasticluster export`.")
+                            "`hwcc export`.")
     def execute(self):
         creator = make_creator(self.params.config,
                                storage_path=self.params.storage)
