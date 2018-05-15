@@ -1,0 +1,5 @@
+('/usr/local/lib/python2.7/site-packages/paramiko-2.4.1-py2.7.egg',
+ None,
+ set(['*.py', '*.pyc', '*.pyd', '*.pyo', '*.so', 'EGG-INFO']),
+ 'DATA',
+ [])

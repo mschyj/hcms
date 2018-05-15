@@ -1,0 +1,10 @@
+---
+- hosts: all
+  vars:
+    - obs_mountpoint: /obs
+    - obs_passwd: /etc/passwd-obs 
+  tasks:
+    - action: shell mkdir {{obs_mountpoint}}
+    - action: shell echo {{user_ak}}:{{user_sk}} > {{obs_passwd}}
+    - action: shell chmod 600 {{obs_passwd}}
+    - action: shell s3fs {{user_obs_name}} {{obs_mountpoint}} -o url={{user_obs_url}} -o endpoint={{user_obs_endpoint}} -o passwd_file={{obs_passwd}}
