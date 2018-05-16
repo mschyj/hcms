@@ -1,5 +1,0 @@
-('/usr/local/lib/python2.7/site-packages/bcrypt-3.1.4-py2.7-linux-x86_64.egg',
- None,
- set(['*.py', '*.pyc', '*.pyd', '*.pyo', '*.so', 'EGG-INFO']),
- 'DATA',
- [])

@@ -1,7 +1,0 @@
-('/usr/local/lib/python2.7/site-packages/coloredlogs-9.0-py2.7.egg',
- None,
- set(['*.py', '*.pyc', '*.pyd', '*.pyo', '*.so', 'EGG-INFO']),
- 'DATA',
- [('coloredlogs.pth',
-   '/usr/local/lib/python2.7/site-packages/coloredlogs-9.0-py2.7.egg/coloredlogs.pth',
-   'DATA')])
