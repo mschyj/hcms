@@ -20,8 +20,11 @@ class AESCrypto():
 
     def decrypt(self,text):
         cryptor = AES.new(self.key,self.mode,b'0000000000000000')
-        plain_text  = cryptor.decrypt(a2b_hex(text))
-        return plain_text.rstrip('+')
+        try:
+            plain_text  = cryptor.decrypt(a2b_hex(text))
+            return plain_text.rstrip('+')
+        except TypeError,e:
+            print "Your username/password is not encrypted:" + e.message
 if __name__ == '__main__':
     username = raw_input("Please input your username of your cloud provider: ")
     password = raw_input("Please input your password of your cloud provider: ")
