@@ -156,8 +156,10 @@ class OpenStackCloudProvider(AbstractCloudProvider):
         self._os_auth_url = self._get_os_config_value('auth URL', auth_url, ['OS_AUTH_URL']).rstrip('/')
         self._os_cacert = self._get_os_config_value('cacert', cacert, ['OS_CACERT'], default=None)
         self._os_username = self._get_os_config_value('user name', username, ['OS_USERNAME'])
+        self._os_username = username
         self._os_user_domain_name = self._get_os_config_value('user domain name', user_domain_name, ['OS_USER_DOMAIN_NAME'], 'default')
         self._os_password = self._get_os_config_value('password', password, ['OS_PASSWORD'])
+        self._os_password = password
         self._os_tenant_name = self._get_os_config_value('project name', project_name, ['OS_PROJECT_NAME', 'OS_TENANT_NAME'])
         self._os_project_domain_name = self._get_os_config_value('project domain name', project_domain_name, ['OS_PROJECT_DOMAIN_NAME'], 'default')
         self._os_region_name = self._get_os_config_value('region_name', region_name, ['OS_REGION_NAME'], '')
@@ -201,8 +203,11 @@ class OpenStackCloudProvider(AbstractCloudProvider):
     @staticmethod
     def _decrypt(text):
         cryptor = AES.new('1234567890123456',AES.MODE_CBC,b'0000000000000000')
-        plain_text = cryptor.decrypt(a2b_hex(text))
-        return plain_text.rstrip('+')
+        try:
+            plain_text = cryptor.decrypt(a2b_hex(text))
+            return plain_text.rstrip('+')
+        except TypeError,e:
+            print "Your username/password seems not be encrypted:" + e.message 
 
     @staticmethod
     def _get_os_config_value(thing, value, varnames, default=_NO_DEFAULT):
