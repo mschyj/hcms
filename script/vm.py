@@ -9,11 +9,16 @@ from keystoneauth1.identity import v3
 from keystoneauth1 import session
 from novaclient import client
 
+from encrypt import AESCrypto
+
 home=os.environ['HOME']
 config=ConfigParser.ConfigParser()
 config.read(home + "/.hwcc/config")
 username=config.get("cloud/hwc","username")
 password=config.get("cloud/hwc","password")
+pc=AESCrypto()
+username=pc.decrypt(username)
+password=pc.decrypt(password)
 auth_url=config.get("cloud/hwc","auth_url")
 user_domain_name=config.get("cloud/hwc","user_domain_name")
 project_domain_name=config.get("cloud/hwc","project_domain_name")
@@ -101,6 +106,6 @@ def init_ssh():
 
 if __name__ == "__main__":
   print ('This is main of module "vm.py"')
-  #get_vm_ip("slurm-frontend001")
+  get_vm_ip("slurm-master001")
   #start_vm('all')
   #find_vm("slurm-frontend004")
