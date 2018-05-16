@@ -173,7 +173,7 @@ class Start(AbstractCommand):
         if self.params.cluster_name:
             cluster_name = self.params.cluster_name
         else:
-            cluster_name = self.params.clustername
+            cluster_name = self.params.template
 
         creator = make_creator(self.params.config,
                                storage_path=self.params.storage)
