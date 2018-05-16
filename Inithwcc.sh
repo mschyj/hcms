@@ -15,5 +15,6 @@ else
   test ! -f $HOME/.hwcc/config  && { cp -fr ./examples/example.conf $HOME/.hwcc/config;echo " $HOME/.hwcc/config is created"; } || echo " $HOME/.hwcc/config is existed"
   test ! -d $HOME/.hwcc/script  && { cp -fr ./script $HOME/.hwcc/;echo " $HOME/.hwcc/script is created"; } || echo " $HOME/.hwcc/script is existed"
 fi 
+python ./script/encrypt.py
 echo " HWCC environment is initilized " 
 echo "|======================================================================|"
