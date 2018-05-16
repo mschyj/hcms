@@ -90,6 +90,8 @@ from elasticluster.exceptions import (
     SecurityGroupError,
 )
 
+from Crypto.Cipher import AES
+from binascii import b2a_hex, a2b_hex
 
 # these defaults should be kept in sync w/ `conf.py`
 DEFAULT_OS_COMPUTE_API_VERSION='2'
@@ -159,9 +161,14 @@ class OpenStackCloudProvider(AbstractCloudProvider):
         self._os_tenant_name = self._get_os_config_value('project name', project_name, ['OS_PROJECT_NAME', 'OS_TENANT_NAME'])
         self._os_project_domain_name = self._get_os_config_value('project domain name', project_domain_name, ['OS_PROJECT_DOMAIN_NAME'], 'default')
         self._os_region_name = self._get_os_config_value('region_name', region_name, ['OS_REGION_NAME'], '')
+       
+        self._os_username = self._decrypt(self._os_username)
+        self._os_password = self._decrypt(self._os_password)
+
         self.config = ConfigParser.ConfigParser()
         self.config.read(os.environ['HOME']+"/.hwcc/config")
         self.availability_zone = self.config.get("cluster/slurm","availability_zone")  
+        
         # the OpenStack versioning mess
         if nova_api_version is not None:
             warn('Deprecated parameter `nova_api_version` given to OpenStackProvider;'
@@ -190,6 +197,12 @@ class OpenStackCloudProvider(AbstractCloudProvider):
         self.request_floating_ip = request_floating_ip
         self._instances = {}
         self._cached_instances = {}
+    
+    @staticmethod
+    def _decrypt(text):
+        cryptor = AES.new('1234567890123456',AES.MODE_CBC,b'0000000000000000')
+        plain_text = cryptor.decrypt(a2b_hex(text))
+        return plain_text.rstrip('+')
 
     @staticmethod
     def _get_os_config_value(thing, value, varnames, default=_NO_DEFAULT):
@@ -836,3 +849,6 @@ class OpenStackCloudProvider(AbstractCloudProvider):
         self.neutron_client = None
         self.glance_client = None
         self.cinder_client = None
+
+if __name__ == '__main__':
+       print OpenStackCloudProvider._decrypt("8785c8623ab262ab3032f088640d672c")
