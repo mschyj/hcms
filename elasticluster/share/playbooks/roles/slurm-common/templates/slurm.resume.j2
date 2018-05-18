@@ -8,7 +8,7 @@ for host in $hosts
 do
    echo "$host is resuming" >>/var/log/power_save.log
    sudo scontrol update NodeName=$host state=resume
-   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{user_client_ip}} python ~/.hwcc/script/start_vm.py slurm-$host >> /var/log/power_save.log
+   ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null {{user_client_ip}} python ~/.hwcc/script/start_vm.py clustername-$host >> /var/log/power_save.log
    echo "$host is resumed"  >>/var/log/power_save.log
 done
 #scontrol reconfig
