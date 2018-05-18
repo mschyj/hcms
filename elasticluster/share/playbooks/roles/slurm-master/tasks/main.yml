@@ -42,3 +42,8 @@
     state=started
   with_items:
     - '{{slurmctld_service_name}}'
+
+- name: Restart slurmctld  server services
+  service:
+    name: slurmctld
+    state: restarted
