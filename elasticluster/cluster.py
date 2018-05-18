@@ -146,7 +146,7 @@ class Cluster(Struct):
         self.thread_pool_max_size = thread_pool_max_size
         self.user_key_name = user_key_name
         self.repository = repository if repository else MemRepository()
-
+        self.availability_zone = extra.pop('availability_zone')
         self.ssh_to = extra.pop('ssh_to', None)
 
         self.user_key_private = os.path.expandvars(user_key_private)
@@ -258,7 +258,7 @@ class Cluster(Struct):
     # time extracting the node index with the default naming policy
     _NODE_KIND_RE = re.compile(r'^[a-z0-9-]*[a-z-]+$', re.I)
 
-    def add_node(self, kind, image_id, image_user, flavor,
+    def add_node(self, kind, image_id, image_user, flavor,availability_zone,
                  security_group, image_userdata='', name=None, **extra):
         """
         Adds a new node to the cluster. This factory method provides an
@@ -307,6 +307,7 @@ class Cluster(Struct):
             cloud_provider=self._cloud_provider,
             cluster_name=self.name,
             flavor=flavor,
+            availability_zone=availability_zone,
             image_id=image_id,
             image_user=image_user,
             image_userdata=image_userdata,
@@ -318,6 +319,7 @@ class Cluster(Struct):
                 'image_id',
                 'image_user',
                 'image_userdata',
+                'availability_zone',
                 'security_group',
                 'user_key_name',
                 'user_key_private',
@@ -336,7 +338,7 @@ class Cluster(Struct):
         self.nodes[kind].append(node)
         return node
 
-    def add_nodes(self, kind, num, image_id, image_user, flavor,
+    def add_nodes(self, kind, num, image_id, image_user, flavor,availability_zone,
                   security_group, image_userdata='', **extra):
         """Helper method to add multiple nodes of the same kind to a cluster.
 
@@ -359,7 +361,7 @@ class Cluster(Struct):
         :param str image_userdata: commands to execute after instance starts
         """
         for i in range(num):
-            self.add_node(kind, image_id, image_user, flavor,
+            self.add_node(kind, image_id, image_user, flavor,availability_zone,
                           security_group, image_userdata=image_userdata, **extra)
 
     def remove_node(self, node, stop=False):
@@ -1140,7 +1142,7 @@ class Node(Struct):
 
     def __init__(self, name, cluster_name, kind, cloud_provider, user_key_public,
                  user_key_private, user_key_name, image_user, security_group,
-                 image_id, flavor, image_userdata=None, ssh_proxy_command='',
+                 image_id, availability_zone,flavor, image_userdata=None, ssh_proxy_command='',
                  **extra):
         self.name = name
         self.cluster_name = cluster_name
@@ -1154,13 +1156,16 @@ class Node(Struct):
         self.image_id = image_id
         self.image_userdata = image_userdata
         self.flavor = flavor
+        self.availability_zone = availability_zone
         self.ssh_proxy_command = ssh_proxy_command
         self.instance_id = extra.pop('instance_id', None)
+        #self.availability_zone = extra.pop('availability_zone')
         self.preferred_ip = extra.pop('preferred_ip', None)
         self.ips = extra.pop('ips', [])
         # Remove extra arguments, if defined
         for key in extra.keys():
             if hasattr(self, key):
+                log.debug ("========" + key)
                 del extra[key]
         self.extra = {}
         self.extra.update(extra.pop('extra', {}))
@@ -1185,7 +1190,7 @@ class Node(Struct):
         self.instance_id = self._cloud_provider.start_instance(
             self.user_key_name, self.user_key_public, self.user_key_private,
             self.security_group,
-            self.flavor, self.image_id, self.image_userdata,
+            self.flavor, self.image_id, self.image_userdata,availability_zone=self.availability_zone,
             username=self.image_user,
             node_name=("%s-%s" % (self.cluster_name, self.name)),
             **self.extra)
