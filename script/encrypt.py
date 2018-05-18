@@ -7,8 +7,8 @@ import ConfigParser
 from Crypto.Cipher import AES
 from binascii import b2a_hex, a2b_hex
 class AESCrypto():
-    def __init__(self,key):
-        self.key = key
+    def __init__(self):
+        self.key = '1234567890123456' 
         self.mode = AES.MODE_CBC
 
     def encrypt(self,text):
@@ -28,7 +28,7 @@ class AESCrypto():
 if __name__ == '__main__':
     username = raw_input("Please input your username of your cloud provider: ")
     password = raw_input("Please input your password of your cloud provider: ")
-    pc = AESCrypto('1234567890123456') 
+    pc = AESCrypto() 
     sec_username = pc.encrypt(username)
     sec_password = pc.encrypt(password)
     print "The encrypted username is: " + sec_username
