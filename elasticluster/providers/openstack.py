@@ -167,10 +167,6 @@ class OpenStackCloudProvider(AbstractCloudProvider):
         self._os_username = self._decrypt(self._os_username)
         self._os_password = self._decrypt(self._os_password)
 
-        self.config = ConfigParser.ConfigParser()
-        self.config.read(os.environ['HOME']+"/.hwcc/config")
-        self.availability_zone = self.config.get("cluster/slurm","availability_zone")  
-        
         # the OpenStack versioning mess
         if nova_api_version is not None:
             warn('Deprecated parameter `nova_api_version` given to OpenStackProvider;'
@@ -412,8 +408,8 @@ class OpenStackCloudProvider(AbstractCloudProvider):
 
 
     def start_instance(self, key_name, public_key_path, private_key_path,
-                       security_group, flavor, image_id, image_userdata,
-                       username=None, node_name=None, **kwargs):
+                       security_group, flavor, image_id, image_userdata,availability_zone=None,
+                       username=None,node_name=None, **kwargs):
         """Starts a new instance on the cloud using the given properties.
         The following tasks are done to start an instance:
 
@@ -439,7 +435,9 @@ class OpenStackCloudProvider(AbstractCloudProvider):
         self._init_os_api()
 
         vm_start_args = {}
-
+        if 'availability_zone' in kwargs:
+            availability_zone=kwargs.pop('availability_zone')
+        vm_start_args['availability_zone'] = availability_zone
         log.debug("Checking keypair `%s` ...", key_name)
         with OpenStackCloudProvider.__node_start_lock:
             self._check_keypair(key_name, public_key_path, private_key_path)
@@ -519,7 +517,7 @@ class OpenStackCloudProvider(AbstractCloudProvider):
         # due to some `nova_client.servers.create()` implementation weirdness,
         # the first three args need to be spelt out explicitly and cannot be
         # conflated into `**vm_start_args`
-        vm = self.nova_client.servers.create(node_name,image_id,flavor,availability_zone=self.availability_zone,**vm_start_args)
+        vm = self.nova_client.servers.create(node_name,image_id,flavor,**vm_start_args)
       #  vm = self.nova_client.servers.create(node_name,image_id, flavor, **vm_start_args)
         # allocate and attach a floating IP, if requested
         if self.request_floating_ip:
