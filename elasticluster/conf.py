@@ -106,6 +106,8 @@ SCHEMA = {
             str: {
                 'flavor': nonempty_str,
                 'image_id': nonempty_str,
+                Optional('availability_zone'): str,
+                Optional('image_userdata', default=''): str,
                 Optional('image_userdata', default=''): str,
                 Optional('security_group', default='default'): str,  ## FIXME: alphanumeric?
                 Optional('network_ids'): str,
@@ -130,6 +132,7 @@ SCHEMA = {
         Optional("accelerator_type"): nonempty_str,
         Optional("allow_project_ssh_keys", default=True): boolean,
         Optional("min_cpu_platform"): nonempty_str,
+        Optional('availability_zone',default=''): str,
         # allow other keys w/out restrictions
         Optional(str): str,
     },
@@ -665,6 +668,7 @@ def _gather_node_kind_info(kind_name, cluster_name, cluster_conf):
             'image_userdata',
             'login',
             'network_ids',
+            'availability_zone',
             'security_group',
             'node_name',
             'ssh_proxy_command',
