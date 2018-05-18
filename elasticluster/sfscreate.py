@@ -1,22 +1,40 @@
+# encoding:UTF-8
 import requests,os,ConfigParser,json,time
-
+import re
+from Crypto.Cipher import AES
+from binascii import b2a_hex, a2b_hex
 class Session:
     def __init__(self):
         home = os.environ['HOME']
         self.config = ConfigParser.ConfigParser()
-        self.path = home+"/.elasticluster/config"
+        self.path = home+"/.hwcc/config"
         self.config.read(self.path)
-        self.username = self.config.get("cloud/catalyst","username")
-        self.password = self.config.get("cloud/catalyst","password")
-        self.domain_name = self.config.get("cloud/catalyst","user_domain_name")
-        self.project_name = self.config.get("cloud/catalyst","project_name")
-        self.auth_url = self.config.get("cloud/catalyst","auth_url")
+        sections = self.config.sections()
+        cloud_section = None
+        for section in sections:
+            if  re.match(r'cloud',section) is not None:
+                cloud_section = section
+        username_encrypt = self.config.get(cloud_section,"username")
+        self.username = self._decrypt( username_encrypt )
+        password_encrypt = self.config.get(cloud_section,"password")
+        self.password = self._decrypt( password_encrypt )
+        self.domain_name = self.config.get(cloud_section,"user_domain_name")
+        self.project_name = self.config.get(cloud_section,"project_name")
+        self.auth_url = self.config.get(cloud_section,"auth_url")
         self.project_id = self.config.get("sfs","project_id")
         self.sfs_endpoint = self.config.get("sfs","sfs_endpoint")
         self.sfs_name = self.config.get("sfs","sfs_name")
         self.sfs_size = self.config.get("sfs","sfs_size")
         self.sfs_network_id = self.config.get("sfs","sfs_network_id") 
-        self.is_create_sfs = self.config.get("sfs","is_create_sfs") 
+        self.is_create_sfs = self.config.get("sfs","is_create_sfs")
+    def _decrypt(self,text):
+        cryptor = AES.new('1234567890123456',AES.MODE_CBC,b'0000000000000000')
+        try:
+            plain_text = cryptor.decrypt(a2b_hex(text))
+            return plain_text.rstrip('+')
+        except TypeError,e:
+            print "Your username/password seems not be encrypted:" + e.message
+
     def auth(self):
         '''
         Auth function,send auth payload to keystone service
