@@ -34,7 +34,6 @@ global_var_user_sk=6imAmmCVVzMqR1dm5x0AKJcL1BILA7TlOsSMhu4G
 global_var_slurm_suspendtime=300
 global_var_user_client_ip=192.168.0.230
 
-global_var_sfs_export_location = sfs-nas1.cn-north-1.myhuaweicloud.com:/share-ef9dc5b4
 
 [cluster/slurm]
 cloud=hwc
@@ -65,7 +64,6 @@ flavor=c1.medium
 [sfs]
 is_create_sfs = True
 project_id = 5a1e22af3b614e6caf082ebcc0fffebe
-sfs_endpoint = sfs.cn-north-1.myhuaweicloud.com
 sfs_name = testsfs
 sfs_size = 20
 sfs_vpc_id = 83c9668b-16bf-44f9-85e2-b15a4e871f2a
