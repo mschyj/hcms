@@ -99,6 +99,10 @@ class Session:
         query_all_sfs_response = query_all_sfs_response.json()    
         for sfs_info in query_all_sfs_response['shares']:
             if sfs_info["name"] == self.sfs_name and sfs_info["status"] == "available":
+                export_location =  sfs_info["export_locations"][0]
+                self.config.set("sfs","global_var_sfs_export_location",export_location)
+                self.config.set("setup/ansible-slurm","global_var_sfs_export_location",export_location)
+                self.config.write(open(self.path,"w"))
                 return True
             else:
                 return False
@@ -189,7 +193,6 @@ class Session:
 
 
     def create_sfs_all(self):
-        
         self.auth()
         if not self.is_create_sfs:
             return 
