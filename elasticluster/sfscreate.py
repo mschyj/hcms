@@ -25,7 +25,7 @@ class Session:
         self.sfs_endpoint = self.config.get("sfs","sfs_endpoint")
         self.sfs_name = self.config.get("sfs","sfs_name")
         self.sfs_size = self.config.get("sfs","sfs_size")
-        self.sfs_network_id = self.config.get("sfs","sfs_network_id") 
+        self.sfs_vpc_id = self.config.get("sfs","sfs_vpc_id")
         self.is_create_sfs = self.config.get("sfs","is_create_sfs")
     def _decrypt(self,text):
         cryptor = AES.new('1234567890123456',AES.MODE_CBC,b'0000000000000000')
@@ -153,7 +153,7 @@ class Session:
 
         add_vpc_para = {
             "os-allow_access": {
-                "access_to": self.sfs_network_id,
+                "access_to": self.sfs_vpc_id,
                 "access_type": "cert",
                 "access_level": "rw"
             }
@@ -203,6 +203,18 @@ class Session:
                 time.sleep(5)
                 self.add_vpc_for_sfs()
                 self.query_sfs_info()
+            time.sleep(5)
+            if not self.has_config():
+                print "create sfs fail,kill the hwcc process"
+                os.system('kill -s 9 `pgrep hwcc`')
+
+    def has_config(self):
+        sfs_export_location = self.config.get("setup/ansible-slurm","global_var_sfs_export_location")
+        print sfs_export_location
+        if sfs_export_location is not None:
+            return True
+        else:
+            return False
 
 
 class ResponseError(Exception):
