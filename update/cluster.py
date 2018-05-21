@@ -113,6 +113,7 @@ class Cluster(Struct):
         self._setup_provider = setup_provider
         self.user_key_name = user_key_name
         self.repository = repository if repository else MemRepository()
+        self.availability_zone = extra.pop('availability_zone')
 
         self.ssh_to = extra.pop('ssh_to', None)
 
@@ -225,7 +226,7 @@ class Cluster(Struct):
     # time extracting the node index with the default naming policy
     _NODE_KIND_RE = re.compile(r'^[a-z0-9-]*[a-z-]+$', re.I)
 
-    def add_node(self, kind, image_id, image_user, flavor,
+    def add_node(self, kind, image_id, image_user, flavor,availability_zone,
                  security_group, image_userdata='', name=None, **extra):
         """
         Adds a new node to the cluster. This factory method provides an
@@ -274,6 +275,7 @@ class Cluster(Struct):
             cloud_provider=self._cloud_provider,
             cluster_name=self.name,
             flavor=flavor,
+            availability_zone=availability_zone,
             image_id=image_id,
             image_user=image_user,
             image_userdata=image_userdata,
@@ -285,6 +287,7 @@ class Cluster(Struct):
                 'image_id',
                 'image_user',
                 'image_userdata',
+                'availability_zone',
                 'security_group',
                 'user_key_name',
                 'user_key_private',
@@ -304,7 +307,7 @@ class Cluster(Struct):
         return node
 
 
-    def add_nodes(self, kind, num, image_id, image_user, flavor,
+    def add_nodes(self, kind, num, image_id, image_user, flavor,availability_zone,
                   security_group, image_userdata='', **extra):
         """Helper method to add multiple nodes of the same kind to a cluster.
 
@@ -327,7 +330,7 @@ class Cluster(Struct):
         :param str image_userdata: commands to execute after instance starts
         """
         for i in range(num):
-            self.add_node(kind, image_id, image_user, flavor,
+            self.add_node(kind, image_id, image_user, flavor,availability_zone,
                           security_group, image_userdata=image_userdata, **extra)
 
     def remove_node(self, node, stop=False):
@@ -1043,7 +1046,7 @@ class Node(Struct):
 
     def __init__(self, name, cluster_name, kind, cloud_provider, user_key_public,
                  user_key_private, user_key_name, image_user, security_group,
-                 image_id, flavor, image_userdata=None, **extra):
+                 image_id,availability_zone, flavor, image_userdata=None, **extra):
         self.name = name
         self.cluster_name = cluster_name
         self.kind = kind
@@ -1056,6 +1059,7 @@ class Node(Struct):
         self.image_id = image_id
         self.image_userdata = image_userdata
         self.flavor = flavor
+        self.availability_zone = availability_zone
 
         self.instance_id = extra.pop('instance_id', None)
         self.preferred_ip = extra.pop('preferred_ip', None)
@@ -1089,6 +1093,7 @@ class Node(Struct):
             self.security_group,
             self.flavor, self.image_id, self.image_userdata,
             username=self.image_user,
+            availability_zone=self.availability_zone,
             node_name=("%s-%s" % (self.cluster_name, self.name)),
             **self.extra)
         log.debug("Node `%s` has instance ID `%s`", self.name, self.instance_id)
