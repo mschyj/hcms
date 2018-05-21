@@ -1,7 +1,14 @@
 ---
-
-- name: Slurm worker nodes Playbook
+- name: Setup SFS mount directory
   hosts: all
+  vars:
+    - sfs_mountpoint: "/sfs"
+  tasks:
+  - name: Create the sfs directory
+    file:
+      path: '{{sfs_mountpoint}}'
+      state: directory
+    when: '{{sfs_enabled|default("true")|bool}}'
   roles:
     - role: 'nis'
       NIS_MASTER: "{{groups.slurm_master[0]}}"
@@ -9,14 +16,21 @@
     - role: 'nfs-client'
       NFS_MOUNTS:
         - fs: '{{sfs_export_location}}'
-          mountpoint: '/sfs'
-      when: '{{sfs_enabled|default("false")|bool}}'
+          mountpoint: '{{sfs_mountpoint}}'
+      when: '{{sfs_enabled|default("true")|bool}}'
     - role: autofs
     - slurm-worker
 
-
-- name: Slurm submit nodes Playbook
+- name: Setup SFS mount directory
   hosts: slurm_submit:slurm_client
+  vars:
+    - sfs_mountpoint: "/sfs"
+  tasks:
+  - name: Create the sfs directory
+    file:
+      path: '{{sfs_mountpoint}}'
+      state: directory
+    when: '{{sfs_enabled|default("true")|bool}}'
   roles:
     - role: 'nis'
       NIS_MASTER: "{{groups.slurm_master[0]}}"
@@ -25,7 +39,8 @@
       NFS_MOUNTS:
         - fs: '{{sfs_export_location}}'
           mountpoint: '/sfs'
-      when: '{{sfs_enabled|default("false")|bool}}'
+          state: 'mounted'
+      when: '{{sfs_enabled|default("true")|bool}}'
     - role: autofs
     - slurm-client
 
