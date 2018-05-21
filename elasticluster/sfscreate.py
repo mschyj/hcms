@@ -22,7 +22,7 @@ class Session:
         self.project_name = self.config.get(cloud_section,"project_name")
         self.auth_url = self.config.get(cloud_section,"auth_url")
         self.project_id = self.config.get("sfs","project_id")
-        self.sfs_endpoint = self.config.get("sfs","sfs_endpoint")
+        self.sfs_endpoint = "sfs.%s.myhuaweicloud.com"%self.project_name
         self.sfs_name = self.config.get("sfs","sfs_name")
         self.sfs_size = self.config.get("sfs","sfs_size")
         self.sfs_vpc_id = self.config.get("sfs","sfs_vpc_id")
