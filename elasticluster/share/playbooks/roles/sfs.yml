@@ -3,12 +3,6 @@
   hosts: all
   vars:
     - sfs_mountpoint: "/sfs"
-  tasks:
-  - name: Create the sfs directory
-    file:
-      path: '{{sfs_mountpoint}}'
-      state: directory
-    when: '{{sfs_enabled|default("true")|bool}}'
   roles:
     - role: 'nis'
       NIS_MASTER: "{{groups.slurm_master[0]}}"
@@ -25,12 +19,6 @@
   hosts: slurm_submit:slurm_client
   vars:
     - sfs_mountpoint: "/sfs"
-  tasks:
-  - name: Create the sfs directory
-    file:
-      path: '{{sfs_mountpoint}}'
-      state: directory
-    when: '{{sfs_enabled|default("true")|bool}}'
   roles:
     - role: 'nis'
       NIS_MASTER: "{{groups.slurm_master[0]}}"
