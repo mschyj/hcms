@@ -370,6 +370,7 @@ class ResizeCluster(AbstractCommand):
                                      sample_node.image_id,
                                      sample_node.image_user,
                                      sample_node.flavor,
+                                     sample_node.availability_zone,
                                      sample_node.security_group,
                                      image_userdata=sample_node.image_userdata,
                                      **sample_node.extra)
@@ -391,6 +392,7 @@ class ResizeCluster(AbstractCommand):
                                      conf_kind['image_id'],
                                      image_user,
                                      conf_kind['flavor'],
+                                     conf_kind[' availability_zone'],
                                      conf_kind['security_group'],
                                      image_userdata=userdata,
                                      **extra)
