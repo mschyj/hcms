@@ -100,6 +100,7 @@ SCHEMA = {
             str: {
                 'flavor': nonempty_str,
                 'image_id': nonempty_str,
+                Optional('availability_zone'): str,
                 Optional('image_userdata', default=''): str,
                 'security_group': str,  ## FIXME: alphanumeric?
                 Optional('network_ids'): str,
@@ -117,6 +118,7 @@ SCHEMA = {
         },
         # allow other keys w/out restrictions
         Optional(str): str,
+        Optional('availability_zone',default=''): str,
     },
     'login': {
         'image_user': nonempty_str,
@@ -601,6 +603,7 @@ def _gather_node_kind_info(kind_name, cluster_name, cluster_conf):
             'login',
             'network_ids',
             'security_group',
+            'availability_zone',
             #'user_key_name',    ## from `login/*`
             #'user_key_private', ## from `login/*`
             #'user_key_public',  ## from `login/*`
