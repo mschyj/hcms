@@ -42,7 +42,7 @@ ssh.connect(vm_ip, port=22,
             allow_agent=True,
             key_filename=local_ssh_dir + "/id_rsa",
             timeout=60)
-clustername=vmname[0:vmname.index("-")]
+clustername=vmname[0:vmname.rfind("-")]
 print "The master name is " + vmname
 print "The cluster name is " + clustername
 cmd_suspend = "sed -i 's/clustername/" + clustername + "/g' /etc/slurm/slurm.suspend.sh"
