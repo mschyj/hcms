@@ -37,7 +37,7 @@ from __future__ import (print_function, division, absolute_import)
 # stdlib imports
 from collections import defaultdict
 from ConfigParser import SafeConfigParser
-import os
+import os,ConfigParser
 from os.path import expanduser, expandvars
 import re
 import sys
@@ -1028,6 +1028,11 @@ class Creator(object):
         :param str name: name of the cluster to read configuration properties
         """
         conf = self.cluster_conf[cluster_template]['setup']
+        home = os.environ['HOME']
+        self.config = ConfigParser.ConfigParser()
+        self.path = home+"/.hwcc/config"
+        self.config.read(self.path)
+        sfs_items = self.config.items("sfs")
         if name:
             conf['cluster_name'] = name
         conf_login = self.cluster_conf[cluster_template]['login']
@@ -1051,9 +1056,9 @@ class Creator(object):
             # Environment variables parsing
             environment_vars[node_kind] = {}
             for key, value in (list(conf.items())
-                               + list(self.cluster_conf[cluster_template].items())):
+                               + list(self.cluster_conf[cluster_template].items()) + list(sfs_items)):
                 # Set both group and global variables
-                for prefix in [(node_kind + '_var_'), "global_var_"]:
+                for prefix in [(node_kind + '_var_'), "global_var_","sfs_"]:
                     if key.startswith(prefix):
                         var = key.replace(prefix, '')
                         environment_vars[node_kind][var] = value
