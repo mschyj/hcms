@@ -21,11 +21,14 @@ class Session:
         self.domain_name = self.config.get(cloud_section,"user_domain_name")
         self.project_name = self.config.get(cloud_section,"project_name")
         self.auth_url = self.config.get(cloud_section,"auth_url")
-        self.project_id = self.config.get("sfs","project_id")
+        self.sfs_cluster = "slurm"
+        self.subnet_id = self.config.get("cluster/%s"%self.sfs_cluster,"network_ids")
+        self.project_id = None
         self.sfs_endpoint = "sfs.%s.myhuaweicloud.com"%self.project_name
+        self.vpc_endpoint = "vpc.%s.myhuaweicloud.com"%self.project_name
         self.sfs_name = self.config.get("sfs","sfs_name")
         self.sfs_size = self.config.get("sfs","sfs_size")
-        self.sfs_vpc_id = self.config.get("sfs","sfs_vpc_id")
+        self.sfs_vpc_id = None
         self.is_create_sfs = self.config.get("sfs","is_create_sfs")
     def _decrypt(self,text):
         cryptor = AES.new('1234567890123456',AES.MODE_CBC,b'0000000000000000')
@@ -78,6 +81,8 @@ class Session:
             raise ResponseError("{0} status , msg:{1}".format(auth_response.status_code,auth_response.content))
     	try:
     	    token = auth_response.headers['X-Subject-Token']
+            self.project_id =  auth_response.json()['token']['project']['id']
+
     	except:
     	    raise ResponseError("cannot find token in headers")
     	self.token = token
@@ -199,6 +204,7 @@ class Session:
         else:
             self.auth()
             if not self.query_all_sfs():
+                self.get_vpc_id()
                 self.create_sfs()
                 time.sleep(5)
                 self.add_vpc_for_sfs()
@@ -210,11 +216,27 @@ class Session:
 
     def has_config(self):
         sfs_export_location = self.config.get("setup/ansible-slurm","global_var_sfs_export_location")
-        print sfs_export_location
         if sfs_export_location is not None:
             return True
         else:
             return False
+
+    def get_vpc_id(self):
+       '''
+       query sfs export location
+
+       '''
+       vpc_id_headers = {
+            'X-Auth-Token': self.token,
+            'Content-Type': 'application/json'
+        }
+       try:
+           subnetinfo_response = requests.get( 'https://%s/v1/%s/subnets/%s' % (self.vpc_endpoint,self.project_id,self.subnet_id), headers=vpc_id_headers)
+           self.sfs_vpc_id = subnetinfo_response.json()['subnet']['vpc_id']
+       except requests.ConnectionError as msg:
+           raise ResponseError(str(msg))
+       if subnetinfo_response.status_code != 201 and subnetinfo_response.status_code !=200 :
+           raise ResponseError("{0} status , msg:{1}".format(subnetinfo_response.status_code,subnetinfo_response.content))
 
 
 class ResponseError(Exception):
