@@ -392,7 +392,7 @@ class ResizeCluster(AbstractCommand):
                                      conf_kind['image_id'],
                                      image_user,
                                      conf_kind['flavor'],
-                                     conf_kind[' availability_zone'],
+                                     conf_kind['availability_zone'],
                                      conf_kind['security_group'],
                                      image_userdata=userdata,
                                      **extra)
