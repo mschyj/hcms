@@ -386,6 +386,7 @@ class ResizeCluster(AbstractCommand):
                 extra.pop('flavor', None)
                 extra.pop('security_group', None)
                 extra.pop('image_userdata', None)
+                extra.pop('availability_zone')
 
                 for i in range(self.params.nodes_to_add[grp]):
                     cluster.add_node(grp,
