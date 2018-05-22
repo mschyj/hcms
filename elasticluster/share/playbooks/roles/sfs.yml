@@ -1,34 +1,31 @@
 ---
 - name: Setup SFS mount directory
   hosts: all
-  vars:
-    - sfs_mountpoint: "/sfs"
   roles:
     - role: 'nis'
       NIS_MASTER: "{{groups.slurm_master[0]}}"
       when: '{{multiuser_cluster|default("true")|bool}}'
     - role: 'nfs-client'
       NFS_MOUNTS:
-        - fs: '{{sfs_export_location}}'
-          mountpoint: '{{sfs_mountpoint}}'
-      when: '{{sfs_enabled|default("true")|bool}}'
+        - fs: '{{mount_url}}'
+          mountpoint: '{{mount_point}}'
+      when: '{{auto_mount|default("true")|bool}}'
     - role: autofs
     - slurm-worker
 
 - name: Setup SFS mount directory
   hosts: slurm_submit:slurm_client
   vars:
-    - sfs_mountpoint: "/sfs"
+    - sfs_mountpoint: '{{mount_point}}'
   roles:
     - role: 'nis'
       NIS_MASTER: "{{groups.slurm_master[0]}}"
       when: '{{multiuser_cluster|default("true")|bool}}'
     - role: 'nfs-client'
       NFS_MOUNTS:
-        - fs: '{{sfs_export_location}}'
-          mountpoint: '/sfs'
-          state: 'mounted'
-      when: '{{sfs_enabled|default("true")|bool}}'
+        - fs: '{{mount_url}}'
+          mountpoint: '{{mount_point}}'
+      when: '{{auto_mount|default("true")|bool}}'
     - role: autofs
     - slurm-client
 
