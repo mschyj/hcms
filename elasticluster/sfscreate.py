@@ -29,7 +29,9 @@ class Session:
         self.sfs_name = self.config.get("sfs","sfs_name")
         self.sfs_size = self.config.get("sfs","sfs_size")
         self.sfs_vpc_id = None
-        self.is_create_sfs = self.config.get("sfs","is_create_sfs")
+        self.is_create_sfs = False
+        if self.config.get("sfs","is_create_sfs") == "True":
+            self.is_create_sfs = True
     def _decrypt(self,text):
         cryptor = AES.new('1234567890123456',AES.MODE_CBC,b'0000000000000000')
         try:
@@ -105,8 +107,7 @@ class Session:
         for sfs_info in query_all_sfs_response['shares']:
             if sfs_info["name"] == self.sfs_name and sfs_info["status"] == "available":
                 export_location =  sfs_info["export_locations"][0]
-                self.config.set("sfs","global_var_sfs_export_location",export_location)
-                self.config.set("setup/ansible-slurm","global_var_sfs_export_location",export_location)
+                self.config.set("sfs","sfs_mount_url",export_location)
                 self.config.write(open(self.path,"w"))
                 return True
             else:
@@ -192,15 +193,16 @@ class Session:
            raise ResponseError("{0} status , msg:{1}".format(sfsinfo_response.status_code,sfsinfo_response.content))
        sfsinfo_response = sfsinfo_response.json()
        export_location = sfsinfo_response["share"]["export_locations"][0]
-       self.config.set("sfs","global_var_sfs_export_location",export_location)
-       self.config.set("setup/ansible-slurm","global_var_sfs_export_location",export_location)
+       self.config.set("sfs","sfs_mount_url",export_location)
        self.config.write(open(self.path,"w"))   
 
 
     def create_sfs_all(self):
         self.auth()
         if not self.is_create_sfs:
-            return 
+           if not self.query_all_sfs():
+               print "can not find available sfs, please check your config"
+               os.system('kill -s 9 `pgrep hwcc`')
         else:
             self.auth()
             if not self.query_all_sfs():
@@ -215,7 +217,7 @@ class Session:
                 os.system('kill -s 9 `pgrep hwcc`')
 
     def has_config(self):
-        sfs_export_location = self.config.get("setup/ansible-slurm","global_var_sfs_export_location")
+        sfs_export_location = self.config.get("sfs","sfs_mount_url")
         if sfs_export_location is not None:
             return True
         else:
