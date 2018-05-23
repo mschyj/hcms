@@ -2,7 +2,7 @@
 
 import sys
 import os
-import ConfigParser
+import subprocess
 
 from Crypto.Cipher import AES
 from binascii import b2a_hex, a2b_hex
@@ -34,9 +34,9 @@ if __name__ == '__main__':
     print "The encrypted username is: " + sec_username
     print "The encrypted password is: " + sec_password
     home=os.environ['HOME']
-    config=ConfigParser.ConfigParser()
-    config.read(home + "/.hwcc/config")
-    config.set("cloud/hwc", "username", sec_username)
-    config.set("cloud/hwc", "password", sec_password)
-    config.write(open(home + "/.hwcc/config","w")) 
+    config=home + "/.hwcc/config"
+    sed_cmd1="sed -i '/username/c username = " + sec_username + "' " + config
+    sed_cmd2="sed -i '/password/c password = " + sec_password + "' " + config
+    subprocess.call(sed_cmd1,shell=True)
+    subprocess.call(sed_cmd2,shell=True)
     print "The config file has been updated"
