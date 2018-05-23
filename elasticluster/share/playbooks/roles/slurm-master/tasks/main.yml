@@ -43,7 +43,15 @@
   with_items:
     - '{{slurmctld_service_name}}'
 
-- name: Restart slurmctld  server services
+- name: Restart slurmctld server services
   service:
     name: slurmctld
     state: restarted
+  when:
+    'is_rhel7_compatible'
+- name: Restart slurm server services
+  service:
+    name: slurm
+    state: restarted
+  when:
+    'is_rhel6_compatible'
