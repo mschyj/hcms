@@ -58,7 +58,7 @@ from elasticluster.utils import (
     timeout,
 )
 # sfscreate import
-from sfscreate import Session
+#from sfscreate import Session
 
 SSH_PORT = 22
 
@@ -474,8 +474,8 @@ class Cluster(Struct):
         """
         log.debug("Note: will *not* issue parallel requests to cloud API.")
         started_nodes = set()
-        sfscreate_session = Session()
-        sfscreate_session.create_sfs_all()
+        #sfscreate_session = Session()
+        #sfscreate_session.create_sfs_all()
         for node in copy(nodes):
             started = self._start_node(node)
             if started:
@@ -494,8 +494,8 @@ class Cluster(Struct):
         thread_pool_size = min(len(nodes), max_thread_pool_size)
         thread_pool = Pool(processes=thread_pool_size)
         log.debug("Note: starting %d nodes concurrently.", thread_pool_size)
-        sfscreate_session = Session()
-        sfscreate_session.create_sfs_all()
+       # sfscreate_session = Session()
+       # sfscreate_session.create_sfs_all()
 
         # pressing Ctrl+C flips this flag, which in turn stops the main loop
         # down below
