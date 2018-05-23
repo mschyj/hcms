@@ -1,6 +1,7 @@
 # encoding:UTF-8
 import requests,os,ConfigParser,json,time
-import re
+import re,commands
+from elasticluster import log
 from Crypto.Cipher import AES
 from binascii import b2a_hex, a2b_hex
 class Session:
@@ -38,7 +39,7 @@ class Session:
             plain_text = cryptor.decrypt(a2b_hex(text))
             return plain_text.rstrip('+')
         except TypeError,e:
-            print "Your username/password seems not be encrypted:" + e.message
+            log.error("Your username/password seems not be encrypted:" + e.message)
 
     def auth(self):
         '''
@@ -107,8 +108,12 @@ class Session:
         for sfs_info in query_all_sfs_response['shares']:
             if sfs_info["name"] == self.sfs_name and sfs_info["status"] == "available":
                 export_location =  sfs_info["export_locations"][0]
-                self.config.set("sfs","sfs_mount_url",export_location)
-                self.config.write(open(self.path,"w"))
+                if "sfs_mount_url" not in self.config.options('sfs') :
+                    (status,output) = commands.getstatusoutput("grep -n sfs_auto_mount ~/.hwcc/config | awk -F : '{print $1}'")
+                    os.system("sed '%s asfs_mount_url = %s' -i %s"%(int(output),export_location,self.path))
+                else:
+                    if self.config.get('sfs','sfs_mount_url') != export_location:
+                        os.system("sed '/^sfs_mount_url/c sfs_mount_url = %s'  -i %s " %(export_location,self.path))
                 return True
             else:
                 return False
@@ -193,15 +198,20 @@ class Session:
            raise ResponseError("{0} status , msg:{1}".format(sfsinfo_response.status_code,sfsinfo_response.content))
        sfsinfo_response = sfsinfo_response.json()
        export_location = sfsinfo_response["share"]["export_locations"][0]
-       self.config.set("sfs","sfs_mount_url",export_location)
-       self.config.write(open(self.path,"w"))   
+       if "sfs_mount_url" not in self.config.options('sfs') :
+            (status,output) = commands.getstatusoutput("grep -n sfs_auto_mount ~/.hwcc/config | awk -F : '{print $1}'")
+            os.system("sed '%s asfs_mount_url = %s' -i %s"%(int(output),export_location,self.path))
+       else:
+            if self.config.get('sfs','sfs_mount_url') != export_location:
+                os.system("sed '/^sfs_mount_url/c sfs_mount_url = %s'  -i %s "%(export_location,self.path))
 
 
     def create_sfs_all(self):
         self.auth()
         if not self.is_create_sfs:
            if not self.query_all_sfs():
-               print "can not find available sfs, please check your config"
+               log.error("can not find available sfs, please check your config")
+               log.warn("your hwcc process will be killed!")
                os.system('kill -s 9 `pgrep hwcc`')
         else:
             self.auth()
@@ -213,10 +223,12 @@ class Session:
                 self.query_sfs_info()
             time.sleep(5)
             if not self.has_config():
-                print "create sfs fail,kill the hwcc process"
+                log.error("create sfs fail,kill the hwcc process")
+                log.warn("your hwcc process will be killed!")
                 os.system('kill -s 9 `pgrep hwcc`')
 
     def has_config(self):
+        self.config.read(self.path)
         sfs_export_location = self.config.get("sfs","sfs_mount_url")
         if sfs_export_location is not None:
             return True
