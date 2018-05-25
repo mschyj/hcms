@@ -35,8 +35,8 @@ if __name__ == '__main__':
     print "The encrypted password is: " + sec_password
     home=os.environ['HOME']
     config=home + "/.hwcc/config"
-    sed_cmd1="sed -i '/username/c username = " + sec_username + "' " + config
-    sed_cmd2="sed -i '/password/c password = " + sec_password + "' " + config
+    sed_cmd1="sed -i '/username =/c username = " + sec_username + "' " + config
+    sed_cmd2="sed -i '/password =/c password = " + sec_password + "' " + config
     subprocess.call(sed_cmd1,shell=True)
     subprocess.call(sed_cmd2,shell=True)
     print "The config file has been updated"
