@@ -1335,7 +1335,7 @@ class Node(Struct):
             log.info("Cannot use squid,because squid section is not in config file")
             return
         is_use_squid = config.get("squid","is_use_squid")
-        if is_use_squid:
+        if is_use_squid == 'True' or is_use_squid == 'true':
             host_ip = config.get("squid","host_ip")
             squid_port = config.get("squid","squid_port")
             stdin,stdout,stderr = ssh.exec_command("/usr/bin/grep http_proxy /etc/profile")
