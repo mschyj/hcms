@@ -23,7 +23,7 @@ Installation steps:
     #wget xxxxxx
     #tar -xvf hwcc.tar.gz
   2:Install by setup.py
-    #python setup.py install
+    #sh Install.sh
     The installation script will install HWCC and dependent python packages.
     We recommend to use virtualenv to install it to avoid the confict to your python environment.
     Additional steps to use virtualenv
