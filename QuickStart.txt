@@ -1,13 +1,13 @@
-Hwcc is a user-friendly command line tool to create,manage and setup HPC clusters hosted on OpenStack Cloud.
+HWCC is a user-friendly command line tool to create,manage and setup HPC clusters hosted on OpenStack Cloud.
 In this quickstart, we will guide user to setup the slurm cluster with this tool quickly.
 
 Prepare you cloud
   1:Logon cloud with your cloud username/password 
-  2:Create client ECS with EIP.
+  2:Create Client-ECS with EIP which will be used to install HWCC.
   3:Create vpc and subnet, get the value for network_ids.
   4:Create security group, get the value for security_goup. 
     a:Please don't use the default security group as the default group can not be found by name when using API.
-    b:Add the quick rules to allow ssh connection.
+    b:Add the access rules to allow ssh connection.
   5:Create the NAT gateway for you vpc, bind the EIP to make all cluster machines be able to access the internet through NAT.
 
 Hwcc Installation Requirement
@@ -15,8 +15,8 @@ Hwcc Installation Requirement
     CentOS 6.9
     Python 2.7.14
   2:Installation Site
-    Hwcc should be installed on the ECS on the cloud in the same VPC to the cluster nodes.
-    The ECS which Hwcc is running on should bind the EIP to access the internet.
+    HWCC will be installed on the Client-ECS on the cloud in the same VPC to the cluster nodes.
+    Bind the EIP to the Client-ECS to make it be able to access the internet.
 
 Installation steps:
   1:Get the tarball and untar it
@@ -24,7 +24,7 @@ Installation steps:
     #tar -xvf hwcc.tar.gz
   2:Install by setup.py
     #python setup.py install
-    the installation script will install the necessary python packages.
+    The installation script will install HWCC and dependent python packages.
     We recommend to use virtualenv to install it to avoid the confict to your python environment.
     Additional steps to use virtualenv
     #pip install virtualenv
@@ -32,7 +32,7 @@ Installation steps:
     #source hwccenv/bin/activate
     #python setup.py install 
 
-Initialize hwcc environment
+Initialize HWCC environment
   1:Deploy the ssh key to ~/.ssh
     #ssh-keygen -t rsa
   2:Deploy the config files to ~/.hwcc
@@ -42,9 +42,9 @@ Start and Manage Cluster
   1:Edit the config file to deploy the cluster
     Follow the comments in the config file
     #vi ~/.hwcc/config
-  2:Start cluster, this will create the cluster according to cluster definition in the config
+  2:Start cluster, this will create the cluster according to config file
     #hwcc start slurm -n test
-  3:Stop cluster. Notice here: this will delete the cluster and cluster machines in the cloud.
+  3:Stop cluster. Notice here: this will delete the cluster(include the ECS) in the cloud.
     #hwcc stop test 
   4:Resize the cluster
     #hwcc resize -a 1:worker test //add one worker node to the cluster
@@ -58,3 +58,4 @@ Enable Slurm power saving options
     #hwcc setup test   
   3:Initialize the slurm environment, the master node name should be supplied here, you could get it from the Cloud console
     #sh Initslurm.sh 
+
