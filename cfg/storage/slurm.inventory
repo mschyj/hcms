@@ -1,7 +1,0 @@
-
-[slurm_worker]
-worker001 ansible_host=192.168.0.101 ansible_user=root user_obs_url=http://obs.cn-north-1.myhwclouds.com user_client_home=/root/hwc user_sfs_url=sfs-nas1.cn-north-1.myhuaweicloud.com:/share-480fca1b user_ak=CNYVGDKK2PPBQEEMUYQG user_obs_name=hwc-obs user_client_ip=192.168.0.230 user_obs_endpoint=cn-north-1 upgrade_packages=no user_sk=6imAmmCVVzMqR1dm5x0AKJcL1BILA7TlOsSMhu4G
-worker002 ansible_host=192.168.0.31 ansible_user=root user_obs_url=http://obs.cn-north-1.myhwclouds.com user_client_home=/root/hwc user_sfs_url=sfs-nas1.cn-north-1.myhuaweicloud.com:/share-480fca1b user_ak=CNYVGDKK2PPBQEEMUYQG user_obs_name=hwc-obs user_client_ip=192.168.0.230 user_obs_endpoint=cn-north-1 upgrade_packages=no user_sk=6imAmmCVVzMqR1dm5x0AKJcL1BILA7TlOsSMhu4G
-
-[slurm_master]
-master001 ansible_host=192.168.0.94 ansible_user=root user_obs_url=http://obs.cn-north-1.myhwclouds.com user_client_home=/root/hwc user_sfs_url=sfs-nas1.cn-north-1.myhuaweicloud.com:/share-480fca1b user_ak=CNYVGDKK2PPBQEEMUYQG user_obs_name=hwc-obs user_client_ip=192.168.0.230 user_obs_endpoint=cn-north-1 upgrade_packages=no user_sk=6imAmmCVVzMqR1dm5x0AKJcL1BILA7TlOsSMhu4G
