@@ -1302,7 +1302,7 @@ class Node(Struct):
                     extra['sock'] = ProxyCommand(proxy_command)
                     log.debug("Using proxy command `%s`.", proxy_command)
                 ssh.connect(str(addr), port=port, **extra)
-                self.squid_proxy(ssh)
+               # self.squid_proxy(ssh)
                 log.debug(
                     "Connection to %s succeeded on port %d,"
                     " will use this IP address for future connections.",
