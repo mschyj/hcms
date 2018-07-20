@@ -4,11 +4,17 @@
 #
 
 # see: https://copr.fedorainfracloud.org/coprs/verdurin/slurm/
+[appstore]
+name=Cluster Appstore
+baseurl=http://{{user_client_ip}}
+enabled=1
+gpgcheck=0
+
 [local-slurm]
 name=local slurm
 baseurl=file:///root/slurm-rpm
 skip_if_unavailable=True
-enabled=1
+enabled=0
 gpgcheck=0
 
 [verdurin-slurm]

@@ -24,12 +24,12 @@
       when: 'is_debian_compatible'
   roles:
     - role: common
-    - role: iptables
+#    - role: iptables
       # FIXME: should change to 'DROP' when all playbooks register their input ports!
       default_input_policy: 'ACCEPT'
     - role: ntpd
       ntp_server: '{{groups.ntp_master|default([])}}'
-    - role: pdsh
+#    - role: pdsh
 
 # This needs to be run as early as possible as it may need to reboot
 # the VM to install driver support
