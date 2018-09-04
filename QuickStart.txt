@@ -1,14 +1,14 @@
-HWCC is a user-friendly command line tool to create,manage and setup HPC clusters hosted on OpenStack Cloud.
+HWCC is a user-friendly command line tool to create,manage and setup HPC clusters hosted on Huawei Cloud.
 In this quickstart, we will guide user to setup the slurm cluster with this tool quickly.
+If you are using the HWCC image from the Huawei Cloud Market, you could ignore the installation part. After deploy the ecs with the HWCC image from Huawei Cloud Market, the user could using the HWCC tool directly without installation.
 
 Prepare you cloud
   1:Logon cloud with your cloud username/password 
   2:Create Client-ECS with EIP which will be used to install HWCC.
   3:Create vpc and subnet, get the value for network_ids.
-  4:Create security group, get the value for security_goup. 
+  4:Create security group, get the value for security_group. 
     a:Please don't use the default security group as the default group can not be found by name when using API.
     b:Add the access rules to allow ssh connection.
-  5:Create the NAT gateway for you vpc, bind the EIP to make all cluster machines be able to access the internet through NAT.
 
 Hwcc Installation Requirement
   1:Software Requirement
@@ -54,8 +54,13 @@ Enable Slurm power saving options
   1:Update the slurm parameter in the config
     global_var_slurm_suspendtime = 300 //unit:second. Default value is "-1", "-1" means the power saving is disable
     global_var_user_client_ip = 192.168.0.230 //the private ip address of your client machine where hwcc is running
-  2:Resetup the cluster
+  2:Re-setup the cluster
     #hwcc setup test   
   3:Initialize the slurm environment, the master node name should be supplied here, you could get it from the Cloud console
     #sh Initslurm.sh 
 
+Create HPC Cluster with CHESS Web Portal
+  1:Enable chess
+    global_var_chess_enabled = true //defined in setup session, default value is false
+  2:Choose chess image
+    image_id = chess_image_id //get chess image id from Huawei Cloud market
